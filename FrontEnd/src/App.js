@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import logo from './logo.svg';
 import './App.css';
+import { fetchPostsIfNeeded } from './actions';
 
 class App extends Component {
   render() {
@@ -13,9 +15,28 @@ class App extends Component {
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
+        <button onClick={ () => { this.props.dispatch(fetchPostsIfNeeded())}} >INIT</button>
+        <ul>
+          {this.props.posts.map((post) => {
+            return <li>{post.id}</li>
+        })}
+        </ul>
       </div>
     );
   }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  let {posts} = state;
+  posts ? 
+    posts = Object.keys(posts).map((postId) => {
+      return posts[postId];
+    }) :
+    posts = [];
+
+  return {
+    posts: posts
+  }
+}
+
+export default connect(mapStateToProps)(App);
