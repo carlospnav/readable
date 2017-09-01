@@ -4,20 +4,27 @@ import { REQUEST_POSTS, RECEIVE_POSTS } from '../actions';
 export const posts = (state = {}, action) => {
 
   switch (action.type){
-    case REQUEST_POSTS:
+    case REQUEST_POSTS:{
+      const {posts} = state;
       return {
         ...state,
-        isFetching: true
+        posts: {
+          ...posts,
+          isFetching: true,
+        }
       }
-
+    }
+      
     case RECEIVE_POSTS:
       {
         const {receivedAt, posts} = action;
         return {
           ...state,
-          isFetching: false,
-          lastUpdated: receivedAt,
-          posts: posts
+          posts: {
+            ...posts,
+            isFetching: false,
+            lastUpdated: receivedAt,
+          }
         }  
       }
       
