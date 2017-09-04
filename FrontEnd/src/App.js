@@ -33,7 +33,7 @@ const mapStateToProps = (state) => {
       return posts[postId];
     }) :
     posts = [];
-
+    console.log(posts);
   return {
     posts: posts
   }

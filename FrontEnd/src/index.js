@@ -7,11 +7,16 @@ import App from './App';
 import { posts } from './reducers';
 import './index.css';
 
-
+const preloadedState = {
+  uiPosts: {
+    isFetching: false
+  }
+}
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(
   posts,
+  preloadedState,
   composeEnhancers(
   applyMiddleware(thunk)
 ));

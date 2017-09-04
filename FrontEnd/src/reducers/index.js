@@ -1,33 +1,49 @@
-import { REQUEST_POSTS, RECEIVE_POSTS } from '../actions';
+import { MAKE_POSTS_REQUEST, RECEIVE_POSTS, EDIT_POST } from '../actions';
 // import { combineReducers } from 'redux';
 
 export const posts = (state = {}, action) => {
 
   switch (action.type){
-    case REQUEST_POSTS:{
-      const {posts} = state;
+    case MAKE_POSTS_REQUEST: {
+      const {uiPosts} = state;
       return {
         ...state,
-        posts: {
-          ...posts,
+        uiPosts: {
+          ...uiPosts,
           isFetching: true,
         }
       }
     }
       
-    case RECEIVE_POSTS:
-      {
+    case RECEIVE_POSTS: {
         const {receivedAt, posts} = action;
         return {
           ...state,
           posts: {
-            ...posts,
+            ...posts
+          },
+          uiPosts:{
             isFetching: false,
             lastUpdated: receivedAt,
           }
         }  
       }
+
+    // case ADD_POST: {
+
+    // }
       
+    case EDIT_POST: {
+        const {editedAt, post} = action;
+        const {posts} = state;
+        return{
+          ...state,
+          posts: {
+            ...posts,
+            [post.id]: post,
+          }
+        }
+      }
     // case BEGIN_POST: {
     //   const { isFetching } = action;
     //   return {
@@ -51,16 +67,8 @@ export const posts = (state = {}, action) => {
     //     }
     //   ]
     // }
-    // case EDIT_POST: {
 
-    //   return[
-    //     ...state,
-    //     {
-
-    //     }
-      
-    //   ]
-    // }
+    
     // case DELETE_POST: {
     //   const { id } = action.id;
 

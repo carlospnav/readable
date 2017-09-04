@@ -1,5 +1,8 @@
-export const REQUEST_POSTS = 'REQUEST_POSTS';
+export const MAKE_POSTS_REQUEST = 'MAKE_POSTS_REQUEST';
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
+export const EDIT_POST = 'EDIT_POST';
+
+const REQUEST_POST = 'REQUEST_POST', REQUEST_EDIT = 'REQUEST_EDIT', REQUEST_POST = 'REQUEST_ADD';
 
 // export const ADD_POST = 'ADD_POST';
 // export const EDIT_POST = 'EDIT_POST';
@@ -30,9 +33,9 @@ class Comment extends Entry{
   }
 }
 
-const requestPosts = () =>{
+const makePostsRequest = () =>{
   return {
-    type: REQUEST_POSTS
+    type: MAKE_POSTS_REQUEST
   }
 }
 
@@ -61,33 +64,96 @@ function fetchPosts() {
       }
     }
 
-    dispatch(requestPosts())
+    dispatch(makePostsRequest())
     return fetch(url, postInit)
       .then(response => response.json())
       .then(json => dispatch(receivePosts(json)))
   }
 }
 
-function shouldFetchPosts(state) {
-  const { posts, isFetching } = state;
-  console.log('deciding whether I should fetch.')
-  if (!posts) {
-    return true
-  } else if (isFetching) {
-    return false
-  } else {
-    return true
+
+
+// const editPost = (post) => {
+//   return dispatch => {
+//     const url = `http://localhost:5001/posts/${post.id}`;
+//     const postInit = {
+//       method: 'PUT',
+//       headers: {
+//         Authorization: 'tievApp'
+//       },
+//       data: post
+//     }
+//   }
+// }
+
+function shouldProceed(state, mode, payload) {
+  const { isFetching } = state.uiPosts;
+  const { posts } = state;
+  const result = {};
+
+  result.shouldProceed = (isFetching) ?  false : true;
+
+  switch(mode){
+    case REQUEST_POST: {
+      result.cb = fetchPosts;
+      break;
+    }
+    case REQUEST_EDIT: {
+      // result.cb = editPosts;
+
+      if (!payload instanceof Post || !Object.keys(posts).includes(payload.id))
+        result.shouldProceed = false;
+    }
+    case REQUEST_ADD: {
+      const validPost = isPostValid(payload);
+
+      result.cb = addPosts;
+      if (!validPost && Object.keys(posts).includes(payload.id))
+        result.shouldProceed = false;
+    }
   }
+
+  return result;
 }
 
-export function fetchPostsIfNeeded() {
-  console.log('trying to fetch!')
+
+export const performRequestIfNeeded = (mode, payload = null) => {
   return (dispatch, getState) => {
-    if (shouldFetchPosts(getState())) {
+    const result = shouldProceed(getState(), mode, payload);
+
+    if (result.shouldProceed) 
+      return dispatch(result.request(payload));
+    else
+      console.log('ERROR ERROR') //ADD ERROR RESOLUTION.
+  }
+}
+//REFACTOR FOLLOWING FUNCTIONS TO AVOID DUPLICATION
+export function fetchPostsIfNeeded() {
+  return (dispatch, getState) => {
+    if (shouldProceed(getState(), REQUEST_POST)) {
       return dispatch(fetchPosts())
     }
   }
 }
+
+
+
+export const createPostIfAble = post => {
+  return (dispatch, getState) => {
+    if (shouldProceed(getState(), REQUEST_ADD, post)){
+      return dispatch(addPost(post))
+    }
+  }
+}
+
+// export const editPostIfAble = (post) => {
+//   return (dispatch, getState) => {
+//     if (shouldProceed(getState(), EDIT, post))
+//       return dispatch(editPost(post))
+//     else
+//       console.log('BADBAD'); //IMPLEMENT ERRORMESSAGE -> Maybe redux error log?
+//   } 
+// }
 
 // export const addPost = ({title, body, author, category}) => {
 //   let post = new Post(title, body, author, category);
