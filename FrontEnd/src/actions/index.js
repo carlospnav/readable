@@ -1,17 +1,10 @@
-export const MAKE_POSTS_REQUEST = 'MAKE_POSTS_REQUEST';
-export const RECEIVE_POSTS = 'RECEIVE_POSTS';
+export const GET_POSTS_REQUEST = 'MAKE_POSTS_REQUEST';
+export const GET_POSTS = 'GET_POSTS';
 export const EDIT_POST = 'EDIT_POST';
+export const ADD_POST = 'ADD_POST';
 
-const REQUEST_POST = 'REQUEST_POST', REQUEST_EDIT = 'REQUEST_EDIT', REQUEST_POST = 'REQUEST_ADD';
-
-// export const ADD_POST = 'ADD_POST';
-// export const EDIT_POST = 'EDIT_POST';
-// export const DELETE_POST = 'DELETE_POST';
-// export const GET_POSTS = 'GET_POSTS';
-// export const ADD_COMMENT = 'ADD_COMMENT';
-// export const EDIT_COMMENT = 'EDIT_COMMENT';
-// export const DELETE_COMMENT = 'DELETE_COMMENT';
-// export const PROCESS_POST = 'PROCESS_POST';
+const REQUEST_POST = 'REQUEST_POST', REQUEST_EDIT_POST = 'REQUEST_EDIT_POST', REQUEST_ADD_POST = 'REQUEST_ADD_POST';
+const URL = 'http://localhost:5001/';
 
 class Entry {
   constructor(body, author){
@@ -33,12 +26,13 @@ class Comment extends Entry{
   }
 }
 
-const makePostsRequest = () =>{
+const makeRequest = (type) =>{
   return {
-    type: MAKE_POSTS_REQUEST
+    type: `${type}_REQUEST`
   }
 }
 
+// -------------
 function receivePosts(json) {
   const posts = json.reduce((posts, post) => {
     let {id} = post;
@@ -49,28 +43,54 @@ function receivePosts(json) {
   }, {})
 
   return {
-    type: RECEIVE_POSTS,
+    type: GET_POSTS,
     posts: posts,
     receivedAt: Date.now()
   }
 }
 
+const addPost = (post) => {
+  return{
+    type: ADD_POST,
+    post: post,
+    receivedAt: Date.now()
+  }
+}
+
+//-----------
 function fetchPosts() {
   return dispatch => {
-    const url = 'http://localhost:5001/posts'
     const postInit = {
       headers: {
         Authorization: 'tievApp'
       }
     }
-
-    dispatch(makePostsRequest())
+    const url = `${URL}posts`;
+    dispatch(makeRequest(GET_POSTS));
     return fetch(url, postInit)
       .then(response => response.json())
-      .then(json => dispatch(receivePosts(json)))
+      .then(json => dispatch(receivePosts(json)));
   }
 }
 
+const processPost = (post) => {
+  return dispatch => {
+    const postInit = {
+      headers: {
+        Authorization: 'tievApp',
+        'content-type': 'application/json' 
+      },
+      method: "POST",
+      body: JSON.stringify(post)
+    }
+    const url = `${URL}posts`;
+    dispatch(makeRequest(ADD_POST));
+    return fetch(url, postInit)
+      .then(response => {
+        dispatch(addPost(post))
+      });
+  }
+}
 
 
 // const editPost = (post) => {
@@ -86,74 +106,57 @@ function fetchPosts() {
 //   }
 // }
 
-function shouldProceed(state, mode, payload) {
-  const { isFetching } = state.uiPosts;
-  const { posts } = state;
+
+//TRY REFACTOR ISFETCHING REPETITION.
+
+function shouldProceed(state, mode) {
   const result = {};
-
-  result.shouldProceed = (isFetching) ?  false : true;
-
+  const {ui} = state;
+  let isFetching;
+  
   switch(mode){
-    case REQUEST_POST: {
-      result.cb = fetchPosts;
+    case GET_POSTS: {
+      isFetching = ui.posts.isFetching;
+      result.request = fetchPosts;
       break;
     }
-    case REQUEST_EDIT: {
-      // result.cb = editPosts;
-
-      if (!payload instanceof Post || !Object.keys(posts).includes(payload.id))
-        result.shouldProceed = false;
+    case ADD_POST: {
+      isFetching = ui.posts.isFetching;
+      result.request = processPost;
+      break;
     }
-    case REQUEST_ADD: {
-      const validPost = isPostValid(payload);
+    // case REQUEST_EDIT: {
+    //   isFetching = ui.posts.isFetching;
+    //   result.cb = editPosts;
+    //   break;
+    // }
 
-      result.cb = addPosts;
-      if (!validPost && Object.keys(posts).includes(payload.id))
-        result.shouldProceed = false;
+    default: {
+      result.shouldProceed = false;
+      result.error = 'There is no action with that name.';
+      return result;
     }
   }
-
+  
+  if (!isFetching) {
+    result.shouldProceed = true;
+    return result;
+  }
+  console.log('opa, muitos cliques.');
+  result.shouldProceed = false;
   return result;
 }
 
-
-export const performRequestIfNeeded = (mode, payload = null) => {
+//RETURNS RESULT OBJECT WITH ERROR IF PROBLEM ENCOUNTERED.
+export const performRequestIfAble = (mode, payload = null) => {
   return (dispatch, getState) => {
-    const result = shouldProceed(getState(), mode, payload);
+    const result = shouldProceed(getState(), mode);
 
     if (result.shouldProceed) 
       return dispatch(result.request(payload));
-    else
-      console.log('ERROR ERROR') //ADD ERROR RESOLUTION.
+    return result;
   }
 }
-//REFACTOR FOLLOWING FUNCTIONS TO AVOID DUPLICATION
-export function fetchPostsIfNeeded() {
-  return (dispatch, getState) => {
-    if (shouldProceed(getState(), REQUEST_POST)) {
-      return dispatch(fetchPosts())
-    }
-  }
-}
-
-
-
-export const createPostIfAble = post => {
-  return (dispatch, getState) => {
-    if (shouldProceed(getState(), REQUEST_ADD, post)){
-      return dispatch(addPost(post))
-    }
-  }
-}
-
-// export const editPostIfAble = (post) => {
-//   return (dispatch, getState) => {
-//     if (shouldProceed(getState(), EDIT, post))
-//       return dispatch(editPost(post))
-//     else
-//       console.log('BADBAD'); //IMPLEMENT ERRORMESSAGE -> Maybe redux error log?
-//   } 
-// }
 
 // export const addPost = ({title, body, author, category}) => {
 //   let post = new Post(title, body, author, category);

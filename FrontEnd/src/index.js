@@ -8,8 +8,15 @@ import { posts } from './reducers';
 import './index.css';
 
 const preloadedState = {
-  uiPosts: {
-    isFetching: false
+  ui: {
+    posts: {
+      isFetching: false,
+      lastUpdated: 0
+    },
+    comments: {
+      isFetching: false,
+      lastUpdated: 0
+    }
   }
 }
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

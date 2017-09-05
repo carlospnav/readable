@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import logo from './logo.svg';
 import './App.css';
-import { fetchPostsIfNeeded } from './actions';
+import { performRequestIfAble } from './actions';
+import { GET_POSTS, ADD_POST } from './actions';
 
 class App extends Component {
   render() {
@@ -15,7 +16,8 @@ class App extends Component {
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
-        <button onClick={ () => { this.props.dispatch(fetchPostsIfNeeded())}} >INIT</button>
+        <button onClick={ () => { this.props.dispatch(performRequestIfAble(GET_POSTS)) }} >INIT</button>
+        <button onClick={ () => { this.props.dispatch(performRequestIfAble(ADD_POST, { id:22222, timestamp: 1467166872634, title: 'some title', body: 'some body', author: 'some author', category: 'udacity', voteScore: 1, deleted: false })) }}> ADD </button>
         <ul>
           {this.props.posts.map((post) => {
             return <li>{post.id}</li>

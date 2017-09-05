@@ -17,7 +17,7 @@ const areRequiredPropertiesNonEmpty = (propertiesArr) => {
 }
 
 const getPropertiesToCheck = ({payload, type}) => {
-  const properties = {};
+  const properties, result = {};
 
   switch(type){
     case POST:{
@@ -41,28 +41,12 @@ const getPropertiesToCheck = ({payload, type}) => {
       break;
   }
 
-  let result2 = Object.keys(properties).reduce((acc1, val1) => {
-    acc1[val1] = properties[val1].reduce((acc2, val2) => {
-    // acc2[val2] = obj[val2];
-    //  }, {});
-    // }
-  }, {});
-
-
-  return Object.keys(properties).reduce((accumulator, value) => {
-    return value.reduce((acc, val) =>{
-      return {
-        
-      }
-    },{});
-  }, {});
-
-  return stringArr.reduce((properties, property) => {
-    return properties.concat({
-      key: property,
-      value: payload[property]
-    });
-  }, []);
+  for (let property of Object.keys(properties)) {
+    result[property] = properties[property].reduce((accumulator, val) => { 
+      accumulator[val] = payload[val];
+      return accumulator;
+    }, {});
+  }
 }
 
 const areTextFieldsString = (checkBundle) => {
@@ -78,7 +62,7 @@ const areTextFieldsString = (checkBundle) => {
     }
   }
   return {
-    value: true
+    value: true,
   };
 }
 
@@ -100,17 +84,14 @@ const getAssessments = (type) => {
 }
 
 const areAllFieldsValid = (checkBundle) => {
- const {type} = checkBundle;
- const assessments = getAssessments(type);
- let checkResult;
+  const {type} = checkBundle,
+    assessments = getAssessments(type),
+    resultBundle = {};
 
-  for (let assessment of assessments){
-    checkResult = assessment(checkBundle);
-    if (!assessment(checkResult.value))
-      return checkResult;
-  }
-  checkResult.value = true;
-  return checkResult;
+  assessments.forEach((assessment) => {
+    resultBundle[assessment.name] = assessment(checkBundle);
+  })
+  return resultBundle;
 }
 
 

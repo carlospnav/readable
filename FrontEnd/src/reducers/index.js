@@ -1,40 +1,56 @@
-import { MAKE_POSTS_REQUEST, RECEIVE_POSTS, EDIT_POST } from '../actions';
+import { GET_POSTS_REQUEST, GET_POSTS, EDIT_POST, ADD_POST } from '../actions';
 // import { combineReducers } from 'redux';
 
 export const posts = (state = {}, action) => {
 
   switch (action.type){
-    case MAKE_POSTS_REQUEST: {
-      const {uiPosts} = state;
+    case GET_POSTS_REQUEST: {
+      const {ui} = state;
       return {
         ...state,
-        uiPosts: {
-          ...uiPosts,
-          isFetching: true,
+        ui: {
+          ...ui,
+          posts: {
+            ...ui.posts,
+            isFetching: true
+          }
         }
       }
     }
       
-    case RECEIVE_POSTS: {
+    case GET_POSTS: {
         const {receivedAt, posts} = action;
+        const {ui} = state;
         return {
           ...state,
           posts: {
             ...posts
           },
-          uiPosts:{
-            isFetching: false,
-            lastUpdated: receivedAt,
+          ui:{
+            ...ui,
+            posts: {
+              isFetching: false,
+              lastUpdated: receivedAt,
+            }
           }
         }  
       }
 
-    // case ADD_POST: {
+    case ADD_POST: { 
+      const {receivedAt, post} = action;
+      const {posts} = state;
+      return{
+        ...state,
+        posts: {
+          ...posts,
+          [post.id]: post,
+        }
+      }
 
-    // }
+    }
       
     case EDIT_POST: {
-        const {editedAt, post} = action;
+        const {receivedAt, post} = action;
         const {posts} = state;
         return{
           ...state,
@@ -44,30 +60,6 @@ export const posts = (state = {}, action) => {
           }
         }
       }
-    // case BEGIN_POST: {
-    //   const { isFetching } = action;
-    //   return {
-    //     isFetching: isFetching,
-    //     ...state,
-    //   }
-    // }
-    // case ADD_POST: {
-    //   let id = state.length;
-    //   const {title, body, author} = action;
-      
-    //   return [
-    //     ...state,
-    //     {
-    //       id: id,
-    //       title,
-    //       body,
-    //       author,
-    //       voteScore: 1,
-    //       deleted: false
-    //     }
-    //   ]
-    // }
-
     
     // case DELETE_POST: {
     //   const { id } = action.id;
