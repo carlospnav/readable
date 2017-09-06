@@ -1,10 +1,9 @@
-import { GET_POSTS_REQUEST, GET_POSTS, EDIT_POST, ADD_POST } from '../actions';
+import { POSTS_REQUEST, GET_POSTS, EDIT_POST, ADD_POST, DELETE_POST } from '../actions';
 // import { combineReducers } from 'redux';
 
 export const posts = (state = {}, action) => {
-
   switch (action.type){
-    case GET_POSTS_REQUEST: {
+    case POSTS_REQUEST: {
       const {ui} = state;
       return {
         ...state,
@@ -37,37 +36,46 @@ export const posts = (state = {}, action) => {
       }
 
     case ADD_POST: { 
-      const {receivedAt, post} = action;
-      const {posts} = state;
+      const { payload } = action;
+      const { posts } = state;
       return{
         ...state,
         posts: {
           ...posts,
-          [post.id]: post,
+          [payload.id]: payload,
         }
       }
 
     }
       
     case EDIT_POST: {
-        const {receivedAt, post} = action;
+        const {payload} = action;
         const {posts} = state;
         return{
           ...state,
           posts: {
             ...posts,
-            [post.id]: post,
+            [payload.id]: payload,
           }
         }
       }
-    
-    // case DELETE_POST: {
-    //   const { id } = action.id;
 
-    //   return [
-    //     ...state
-    //   ].slice(id, 1);
-    // }
+    /*payload: The ID of the post to be deleted. */
+    case DELETE_POST: {
+      const{payload} = action;
+      const{posts} = state;
+      
+      return{
+        ...state,
+        posts:{
+          ...posts,
+          [payload]: {
+            ...posts[payload],
+            deleted: true
+          }
+        }
+      }
+    }
     
     default:
       return state;
