@@ -1,8 +1,21 @@
 import { POSTS_REQUEST, GET_POSTS, EDIT_POST, ADD_POST, DELETE_POST } from '../actions';
 // import { combineReducers } from 'redux';
 
+/*
+  Posts Reducer. Contains:
+  Request
+  GetAll
+  Create
+  Edit
+  Delete
+ */
 export const posts = (state = {}, action) => {
   switch (action.type){
+
+    /*
+      Updates UI entity with a flag for posts being processed.
+      Avoids multiple requests being sent until the last request is processed.
+    */
     case POSTS_REQUEST: {
       const {ui} = state;
       return {
@@ -16,7 +29,8 @@ export const posts = (state = {}, action) => {
         }
       }
     }
-      
+     
+    //Fetches all posts.
     case GET_POSTS: {
         const {receivedAt, posts} = action;
         const {ui} = state;
@@ -35,6 +49,7 @@ export const posts = (state = {}, action) => {
         }  
       }
 
+    //Creates a post.
     case ADD_POST: { 
       const { payload } = action;
       const { posts } = state;
@@ -48,6 +63,7 @@ export const posts = (state = {}, action) => {
 
     }
       
+    //Edits a post.
     case EDIT_POST: {
         const {payload} = action;
         const {posts} = state;
@@ -60,7 +76,10 @@ export const posts = (state = {}, action) => {
         }
       }
 
-    /*payload: The ID of the post to be deleted. */
+    /*
+      Deletes a post. Payload is the Id of the post to
+      be deleted 
+    */
     case DELETE_POST: {
       const{payload} = action;
       const{posts} = state;

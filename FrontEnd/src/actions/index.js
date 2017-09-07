@@ -28,6 +28,7 @@ class Comment extends Entry{
 
 const makeRequest = (entity) =>{
   entity = entity.toUpperCase();
+
   return {
     type: `${entity}_REQUEST`
   }
@@ -59,6 +60,7 @@ const processPost = (type, payload) => {
 
 const processRequest = (result) => {
   const {entity} = result;
+
   return dispatch => {
     dispatch(makeRequest(entity));
     return result.xhr(dispatch);
@@ -67,89 +69,87 @@ const processRequest = (result) => {
 
 const configRequest = (options) => {
   const {actionType, payload, entity} = options;
-  const Authorization = 'tievApp';
+  const get = (dispatch, {url, xhrInit}) => {
+    return fetch(url, xhrInit)
+      .then(response => response.json())
+      .then(json => dispatch(receivePosts(json)));
+  }
+  const send = (dispatch, {url, xhrInit, actionType, payload}) => {
+    return fetch(url, xhrInit)
+      .then((response) => {
+        dispatch(processPost(actionType, payload));
+      });
+  }
+  const commonXhr = {
+    xhrInit:{
+      headers:{
+        Authorization: 'tievApp'
+      }
+    },
+    actionType,
+    payload,
+    entity,
+  }
+
   switch(actionType){
     case GET_POSTS: 
       return {
-        xhrInit: {
-          method: 'GET',
-          headers: {
-            Authorization
-          }
-        },
-        actionType: GET_POSTS,
+        ...commonXhr,
         url: `${endpoint}posts`,
-        payload: null,
-        entity: 'posts',
-        xhr: function(dispatch) {
-          return fetch(this.url, this.xhrInit)
-                  .then(response => response.json())
-                  .then(json => dispatch(receivePosts(json)))
+        xhr: function (dispatch) {
+          get(dispatch, this);
         },
         shouldProceed: true
-      }
+      };
 
     case ADD_POST: 
       return {
-        xhrInit: {
+        ...commonXhr,
+        xhrInit:{
+          ...commonXhr.xhrInit,
           headers: {
-            Authorization,
+            ...commonXhr.xhrInit.headers,
             'content-type': 'application/json'
           },
           method: 'POST',
           body: JSON.stringify(payload)
         },
-        actionType,
         url: `${endpoint}posts`,
-        payload,
-        entity,
-        xhr: function(dispatch) {
-              return fetch(this.url, this.xhrInit)
-                      .then(response => {
-                        dispatch(processPost(this.actionType, this.payload));
-                      })
+        xhr: function(dispatch){
+          send(dispatch, this);
         },
         shouldProceed: true
-      }
+      };
+
     case EDIT_POST:
       return {
+        ...commonXhr,
         xhrInit: {
+          ...commonXhr.xhrInit,
           headers: {
-            Authorization,
+            ...commonXhr.xhrInit.headers,
             'content-type': 'application/json'
           },
           method: 'PUT',
           body: JSON.stringify(payload)
         },
-        actionType,
         url: `${endpoint}posts/${payload.id}`,
-        payload,
-        entity,
         xhr: function(dispatch){
-          return fetch(this.url, this.xhrInit)
-                  .then(response => {
-                    dispatch(processPost(this.actionType, this.payload))
-                  })
+          send(dispatch, this);
         },
         shouldProceed: true
-      }
+      };
+
     case DELETE_POST:
       return {
+        ...commonXhr,
         xhrInit: {
-          headers: {
-            Authorization
-          },
+          ...commonXhr.xhrInit,
           method: 'DELETE'
         },
-        actionType,
         url: `${endpoint}posts/${payload}`,
-        entity,
-        payload,
         xhr: function(dispatch){
-          return fetch(this.url, this.xhrInit)
-                  .then(response => {
-                    dispatch(processPost(this.actionType, this.payload))
-                  })
+          send(dispatch, this);
         },
         shouldProceed: true
       }
@@ -176,18 +176,17 @@ function shouldProceed(state, entity, actionType, payload) {
       shouldProceed: false
     }
   }
-    
+
   return configRequest({actionType, payload, entity});
 }
 
 //RETURNS RESULT OBJECT WITH ERROR IF PROBLEM ENCOUNTERED
 export const performRequestIfAble = (actionType, entity, payload = null) => {
-
   return (dispatch, getState) => {
     const result = shouldProceed(getState(), entity, actionType, payload);
 
     if (result.shouldProceed)
-      return dispatch(processRequest(configRequest(result)));
+      return dispatch(processRequest(result));
 
     return result;
   }
