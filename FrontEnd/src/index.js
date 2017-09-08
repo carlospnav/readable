@@ -4,7 +4,7 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import App from './App';
-import { posts } from './reducers';
+import rootReducer from './reducers';
 import './index.css';
 
 const preloadedState = {
@@ -17,12 +17,14 @@ const preloadedState = {
       isFetching: false,
       lastUpdated: 0
     }
-  }
+  },
+  posts: {},
+  comments: {},
 }
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(
-  posts,
+  rootReducer,
   preloadedState,
   composeEnhancers(
   applyMiddleware(thunk)
