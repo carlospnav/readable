@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import logo from './logo.svg';
 import './App.css';
 import { performRequestIfAble } from './actions';
-import { GET_POSTS, ADD_POST, EDIT_POST, DELETE_POST, GET_COMMENTS } from './actions';
+import { GET_POSTS, ADD_POST, EDIT_POST, DELETE_POST, GET_COMMENTS, ADD_COMMENT, EDIT_COMMENT, DELETE_COMMENT } from './actions';
 
 class App extends Component {
   render() {
@@ -29,10 +29,14 @@ class App extends Component {
         </ul>
         <hr/>
         <button onClick={ () => { this.props.dispatch(performRequestIfAble(GET_COMMENTS, 'comments', '8xf0y6ziyjabvozdd253nd'))}}> GET COMMENTS </button>
+        <button onClick={ () => { this.props.dispatch(performRequestIfAble(GET_COMMENTS, 'comments', '6ni6ok3ym7mf1p33lnez'))}}> GET COMMENTS 2</button>
+        <button onClick={ () => { this.props.dispatch(performRequestIfAble(ADD_COMMENT, 'comments', { id:121, parentId: '6ni6ok3ym7mf1p33lnez', timestamp: 1469479767190, body: 'Moar comments.', author: 'thingsix', voteScore: 4, deleted: false, parentDeleted: false })) }}> ADD </button>
+        <button onClick={ () => { this.props.dispatch(performRequestIfAble(EDIT_COMMENT, 'comments', { id:121, parentId: '6ni6ok3ym7mf1p33lnez', timestamp: 1469479767190, body: 'Moar comments.', author: 'thingsixtySix', voteScore: 4, deleted: false, parentDeleted: false })) }}> EDIT </button>
+        <button onClick={ () => { this.props.dispatch(performRequestIfAble(DELETE_COMMENT, 'comments', 121)) }}> DELETE </button>
         <ul>
           {this.props.comments.map((comment) => {
             return (
-              <li>{`post: ${comment.parentId} Id: ${comment.id} autor: ${comment.body} `}</li>
+              <li>{`post: ${comment.parentId} Id: ${comment.id} autor: ${comment.author} deletado: ${comment.deleted}`}</li>
             )
           })}
         </ul>

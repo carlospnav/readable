@@ -67,7 +67,7 @@ const processEntity = (type, payload) => {
 
 const processRequest = (result) => {
   const {entity} = result;
-
+  
   return dispatch => {
     dispatch(makeRequest(entity));
     return result.xhr(dispatch);
@@ -170,6 +170,55 @@ const configRequest = (options) => {
           get(dispatch, this);
         }
       }
+    
+    case ADD_COMMENT:
+    return {
+      ...commonXhr,
+      xhrInit:{
+        ...commonXhr.xhrInit,
+        headers: {
+          ...commonXhr.xhrInit.headers,
+          'content-type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify(payload),
+      },
+      url: `${endpoint}comments`,
+      xhr: function(dispatch){
+        send(dispatch, this);
+      }
+    }
+
+    case EDIT_COMMENT:
+    return{
+      ...commonXhr,
+      xhrInit: {
+        ...commonXhr.xhrInit,
+        headers: {
+          ...commonXhr.xhrInit.headers,
+          'content-type': 'application/json'
+        },
+        method: 'PUT',
+        body: JSON.stringify(payload)
+      },
+      url: `${endpoint}comments/${payload.id}`,
+      xhr: function(dispatch){
+        send(dispatch, this);
+      }
+    }
+
+    case DELETE_COMMENT:
+    return{
+      ...commonXhr,
+      xhrInit: {
+        ...commonXhr.xhrInit,
+        method: 'DELETE'
+      },
+      url: `${endpoint}comments/${payload}`,
+      xhr: function(dispatch){
+        send(dispatch, this);
+      }
+    }
 
     default: {
       return {

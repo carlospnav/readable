@@ -1,4 +1,4 @@
-import { POSTS_REQUEST, GET_POSTS, EDIT_POST, ADD_POST, DELETE_POST, COMMENTS_REQUEST, GET_COMMENTS } from '../actions';
+import { POSTS_REQUEST, GET_POSTS, EDIT_POST, ADD_POST, DELETE_POST, COMMENTS_REQUEST, GET_COMMENTS, ADD_COMMENT, EDIT_COMMENT, DELETE_COMMENT } from '../actions';
 import { combineReducers } from 'redux';
 
 
@@ -32,13 +32,14 @@ const ui = (state = {}, action) => {
       Avoids multiple requests being sent until the last request is processed.
     */
     case COMMENTS_REQUEST: {
-      const {comments} = state;
+      const {comments} = action;
+      const{isFetching} = state['comments'];
 
       return {
         ...state,
         comments: {
           ...comments,
-          isFetching: true
+          isFetching: !isFetching
         }
       }
     }
@@ -117,7 +118,8 @@ const comments = (state = {}, action) => {
     case GET_COMMENTS: {
       const {comments, payload} = action;
 
-      const previousComments = Object.values(state.comments).reduce((items, item) => {
+
+      const previousComments = Object.values(state).reduce((items, item) => {
         if (item.parentId !== payload)
           items[item.id] = item;
         return items;
@@ -132,6 +134,35 @@ const comments = (state = {}, action) => {
         ...newComments,
       }  
     }
+    case ADD_COMMENT: {
+      const {payload} = action;
+
+      return {
+        ...state,
+        [payload.id]: payload
+      }
+    }
+
+    case EDIT_COMMENT: {
+      const {payload} = action;
+
+      return {
+        ...state,
+        [payload.id]: payload 
+      }
+    }
+
+    case DELETE_COMMENT: {
+        const {payload} = action;
+        
+        return{
+          ...state,
+          [payload]: {
+            ...state[payload],
+            deleted: true
+          }
+        }
+      }
 
     default:
       return state;

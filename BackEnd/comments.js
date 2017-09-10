@@ -22,7 +22,17 @@ const defaultData = {
     voteScore: -5,
     deleted: false,
     parentDeleted: false
-  }
+  },
+  // "121": {
+  //   id: '121',
+  //   parentId: "6ni6ok3ym7mf1p33lnez",
+  //   timestamp: 1469479767192,
+  //   body: 'Moar comments.',
+  //   author: 'thingsix',
+  //   voteScore: 4,
+  //   deleted: false,
+  //   parentDeleted: false
+  // }
 }
 
 function getData (token) {
