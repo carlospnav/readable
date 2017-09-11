@@ -1,5 +1,6 @@
-import { POSTS_REQUEST, GET_POSTS, EDIT_POST, ADD_POST, DELETE_POST, COMMENTS_REQUEST, GET_COMMENTS, ADD_COMMENT, EDIT_COMMENT, DELETE_COMMENT } from '../actions';
+import { POSTS_REQUEST, GET_POSTS, EDIT_POST, ADD_POST, DELETE_POST, VOTE_POST, COMMENTS_REQUEST, GET_COMMENTS, ADD_COMMENT, EDIT_COMMENT, DELETE_COMMENT, VOTE_COMMENT } from '../actions';
 import { combineReducers } from 'redux';
+
 
 
 /*
@@ -73,7 +74,11 @@ const posts = (state = {}, action) => {
       
       return{
         ...state,
-        [payload.id]: payload,
+        [payload.id]: {
+          ...payload,
+          voteScore: 1,
+          deleted: false
+        }
       }
     }
       
@@ -83,7 +88,10 @@ const posts = (state = {}, action) => {
 
         return{
           ...state,
-          [payload.id]: payload,
+          [payload.id]: {
+            ...state[payload.id],
+            ...payload
+          }
         }
       }
 
@@ -99,6 +107,19 @@ const posts = (state = {}, action) => {
         [payload]: {
           ...state[payload],
           deleted: true
+        }
+      }
+    }
+
+    case VOTE_POST: {
+      const{id, option} = action.payload;
+      let score = state[id].voteScore;
+
+      return{
+        ...state,
+        [id]: {
+          ...state[id],
+          voteScore: (option === 'upVote') ? ++score : --score
         }
       }
     }
@@ -134,12 +155,18 @@ const comments = (state = {}, action) => {
         ...newComments,
       }  
     }
+
     case ADD_COMMENT: {
       const {payload} = action;
 
       return {
         ...state,
-        [payload.id]: payload
+        [payload.id]: {
+          ...payload,
+          voteScore: 1,
+          deleted: false,
+          parentDeleted: false
+        }
       }
     }
 
@@ -148,7 +175,10 @@ const comments = (state = {}, action) => {
 
       return {
         ...state,
-        [payload.id]: payload 
+        [payload.id]: {
+          ...state[payload.id],
+          ...payload 
+        }
       }
     }
 
@@ -160,6 +190,19 @@ const comments = (state = {}, action) => {
           [payload]: {
             ...state[payload],
             deleted: true
+          }
+        }
+      }
+
+      case VOTE_COMMENT: {
+        const{id, option} = action.payload;
+        let score = state[id].voteScore;
+  
+        return{
+          ...state,
+          [id]: {
+            ...state[id],
+            voteScore: (option === 'upVote') ? ++score : --score
           }
         }
       }

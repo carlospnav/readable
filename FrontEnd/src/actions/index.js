@@ -3,11 +3,13 @@ export const GET_POSTS = 'GET_POSTS';
 export const EDIT_POST = 'EDIT_POST';
 export const ADD_POST = 'ADD_POST';
 export const DELETE_POST = 'DELETE_POST';
+export const VOTE_POST = 'VOTE_POST';
 export const COMMENTS_REQUEST = 'COMMENTS_REQUEST';
 export const GET_COMMENTS = 'GET_COMMENTS';
 export const ADD_COMMENT = 'ADD_COMMENT';
 export const EDIT_COMMENT = 'EDIT_COMMENT';
 export const DELETE_COMMENT = 'DELETE_COMMENT';
+export const VOTE_COMMENT = 'VOTE_COMMENT';
 
 const endpoint = 'http://localhost:5001/';
 
@@ -107,13 +109,23 @@ const configRequest = (options) => {
     case GET_POSTS: 
       return {
         ...commonXhr,
-        url: `${endpoint}posts`,
+        url: `${endpoint}${entity}`,
         xhr: function (dispatch) {
           get(dispatch, this);
         }
       };
 
-    case ADD_POST: 
+    case GET_COMMENTS:
+      return{
+        ...commonXhr,
+        url: `${endpoint}posts/${payload}/comments`,
+        xhr: function(dispatch){
+          get(dispatch, this);
+        }
+      };
+
+    case ADD_POST:
+    case ADD_COMMENT:
       return {
         ...commonXhr,
         xhrInit:{
@@ -125,13 +137,14 @@ const configRequest = (options) => {
           method: 'POST',
           body: JSON.stringify(payload)
         },
-        url: `${endpoint}posts`,
+        url: `${endpoint}${entity}`,
         xhr: function(dispatch){
           send(dispatch, this);
         }
       };
 
     case EDIT_POST:
+    case EDIT_COMMENT:
       return {
         ...commonXhr,
         xhrInit: {
@@ -143,82 +156,45 @@ const configRequest = (options) => {
           method: 'PUT',
           body: JSON.stringify(payload)
         },
-        url: `${endpoint}posts/${payload.id}`,
+        url: `${endpoint}${entity}/${payload.id}`,
         xhr: function(dispatch){
           send(dispatch, this);
         }
-      };
+      };    
 
     case DELETE_POST:
+    case DELETE_COMMENT:
       return {
         ...commonXhr,
         xhrInit: {
           ...commonXhr.xhrInit,
           method: 'DELETE'
         },
-        url: `${endpoint}posts/${payload}`,
+        url: `${endpoint}${entity}/${payload}`,
         xhr: function(dispatch){
           send(dispatch, this);
         }
       };
-    
-    case GET_COMMENTS:
+
+
+    case VOTE_POST:
+    case VOTE_COMMENT:
       return{
         ...commonXhr,
-        url: `${endpoint}posts/${payload}/comments`,
+        xhrInit: {
+          ...commonXhr.xhrInit,
+          headers:{
+            ...commonXhr.xhrInit.headers,
+            'content-type': 'application/json'
+          },
+          method: 'POST',
+          body: JSON.stringify(payload)
+        },
+        url: `${endpoint}${entity}/${payload.id}`,
         xhr: function(dispatch){
-          get(dispatch, this);
+          send(dispatch, this);
         }
       }
-    
-    case ADD_COMMENT:
-    return {
-      ...commonXhr,
-      xhrInit:{
-        ...commonXhr.xhrInit,
-        headers: {
-          ...commonXhr.xhrInit.headers,
-          'content-type': 'application/json'
-        },
-        method: 'POST',
-        body: JSON.stringify(payload),
-      },
-      url: `${endpoint}comments`,
-      xhr: function(dispatch){
-        send(dispatch, this);
-      }
-    }
-
-    case EDIT_COMMENT:
-    return{
-      ...commonXhr,
-      xhrInit: {
-        ...commonXhr.xhrInit,
-        headers: {
-          ...commonXhr.xhrInit.headers,
-          'content-type': 'application/json'
-        },
-        method: 'PUT',
-        body: JSON.stringify(payload)
-      },
-      url: `${endpoint}comments/${payload.id}`,
-      xhr: function(dispatch){
-        send(dispatch, this);
-      }
-    }
-
-    case DELETE_COMMENT:
-    return{
-      ...commonXhr,
-      xhrInit: {
-        ...commonXhr.xhrInit,
-        method: 'DELETE'
-      },
-      url: `${endpoint}comments/${payload}`,
-      xhr: function(dispatch){
-        send(dispatch, this);
-      }
-    }
 
     default: {
       return {
