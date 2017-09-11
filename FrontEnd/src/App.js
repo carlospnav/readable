@@ -1,15 +1,20 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
+// import { connect } from 'react-redux';
+import { Route } from 'react-router-dom';
 import logo from './logo.svg';
 import './App.css';
 import { performRequestIfAble } from './actions';
 import { GET_POSTS, ADD_POST, EDIT_POST, DELETE_POST, VOTE_POST, GET_COMMENTS, ADD_COMMENT, EDIT_COMMENT, DELETE_COMMENT, VOTE_COMMENT } from './actions';
+import Root from './components/root'
 
-class App extends Component {
-  render() {
+const App = () => {
     return (
       <div className="App">
-        <div className="App-header">
+        <Route exact path="/" render={() => (
+          <Root />
+         )} />
+      </div>
+        /* <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Welcome to React</h2>
         </div>
@@ -42,27 +47,27 @@ class App extends Component {
               <li>{`post: ${comment.parentId} Id: ${comment.id} autor: ${comment.author} deletado: ${comment.deleted} voteScore: ${comment.voteScore}`}</li>
             )
           })}
-        </ul>
-      </div>
-    );
-  }
+        </ul> */
+  );
 }
 
-const mapStateToProps = (state) => {
-  let {posts, comments} = state;
-  const ObjToArr = (entity) => {
-    entity ?
-      entity = Object.keys(entity).map((entityId) => {
-        return entity[entityId];
-      }) :
-      entity = [];
-    return entity;
-  };
+// const mapStateToProps = (state) => {
+//   let {posts, comments} = state;
+//   const ObjToArr = (entity) => {
+//     entity ?
+//       entity = Object.keys(entity).map((entityId) => {
+//         return entity[entityId];
+//       }) :
+//       entity = [];
+//     return entity;
+//   };
 
-  return {
-    posts: ObjToArr(posts),
-    comments: ObjToArr(comments),
-  }
-}
+//   return {
+//     posts: ObjToArr(posts),
+//     comments: ObjToArr(comments),
+//   }
+// }
 
-export default connect(mapStateToProps)(App);
+// export default connect(mapStateToProps)(App);
+
+export default App;
