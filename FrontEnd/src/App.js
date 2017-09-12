@@ -1,11 +1,7 @@
-import React, { Component } from 'react';
-// import { connect } from 'react-redux';
+import React from 'react';
 import { Route } from 'react-router-dom';
-import logo from './logo.svg';
-import './App.css';
-import { performRequestIfAble } from './actions';
-import { GET_POSTS, ADD_POST, EDIT_POST, DELETE_POST, VOTE_POST, GET_COMMENTS, ADD_COMMENT, EDIT_COMMENT, DELETE_COMMENT, VOTE_COMMENT } from './actions';
-import Root from './components/root'
+// import { performRequestIfAble } from './actions';
+import Root from './components'
 
 const App = () => {
     return (
@@ -14,11 +10,7 @@ const App = () => {
           <Root />
          )} />
       </div>
-        /* <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
+      /*<p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
         <button onClick={ () => { this.props.dispatch(performRequestIfAble(GET_POSTS, 'posts')) }} >INIT</button>

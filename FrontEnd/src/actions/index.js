@@ -10,6 +10,8 @@ export const ADD_COMMENT = 'ADD_COMMENT';
 export const EDIT_COMMENT = 'EDIT_COMMENT';
 export const DELETE_COMMENT = 'DELETE_COMMENT';
 export const VOTE_COMMENT = 'VOTE_COMMENT';
+export const CATEGORIES_REQUEST = 'CATEGORY_REQUEST';
+export const GET_CATEGORIES = 'GET_CATEGORIES';
 
 const endpoint = 'http://localhost:5001/';
 
@@ -43,15 +45,38 @@ const makeRequest = (entity) =>{
   }
 }
 
-// -------------
+// ------------- MAYBE REFACTOR THIS SWITCH.
 function receiveEntity(json, actionType, entity, payload){
-  const items = json.reduce((items, item) => {
-    let {id} = item;
-    items[id] = {
-      ...item
+  let items;
+
+  switch (entity) {
+    case 'categories': {
+      json = json.categories;
+
+      items = json.reduce((items, item) => {
+        let {name} = item;
+        items[name] = {
+          ...item
+        }
+        return items;
+      }, {})
+      break;
     }
-    return items;
-  }, {})
+
+    case 'posts':
+    case 'comments':
+
+      items = json.reduce((items, item) => {
+        let {id} = item;
+        items[id] = {
+          ...item
+        }
+        return items;
+      }, {})
+    break;
+
+    default: items = [];
+  }
 
   return {
     type:actionType,
@@ -106,7 +131,8 @@ const configRequest = (options) => {
   }
 
   switch(actionType){
-    case GET_POSTS: 
+    case GET_POSTS:
+    case GET_CATEGORIES: 
       return {
         ...commonXhr,
         url: `${endpoint}${entity}`,

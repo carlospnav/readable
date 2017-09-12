@@ -1,20 +1,20 @@
-import { POSTS_REQUEST, GET_POSTS, EDIT_POST, ADD_POST, DELETE_POST, VOTE_POST, COMMENTS_REQUEST, GET_COMMENTS, ADD_COMMENT, EDIT_COMMENT, DELETE_COMMENT, VOTE_COMMENT } from '../actions';
+import { POSTS_REQUEST, GET_POSTS, EDIT_POST, ADD_POST, DELETE_POST, VOTE_POST, COMMENTS_REQUEST, GET_COMMENTS, ADD_COMMENT, EDIT_COMMENT, DELETE_COMMENT, VOTE_COMMENT, CATEGORIES_REQUEST, GET_CATEGORIES } from '../actions';
 import { combineReducers } from 'redux';
 
 
 
 /*
-  UI Reducer. Contains:
+  UI Reducer.
+  Updates UI entities with a flag for processing. 
+  Avoids multiple requests being sent until the last request is processed.
+  Contains:
   POSTS_REQUEST
   COMMENTS_REQUEST
+  CATEGORIES_REQUEST
  */
 const ui = (state = {}, action) => {
   switch (action.type){
 
-    /*
-      Updates UI entity with a flag for posts being processed.
-      Avoids multiple requests being sent until the last request is processed.
-    */
     case POSTS_REQUEST: {
       const {posts} = action;
       const {isFetching} = state['posts'];
@@ -28,10 +28,6 @@ const ui = (state = {}, action) => {
       }
     }
 
-    /*
-      Updates UI entity with a flag for comments being processed.
-      Avoids multiple requests being sent until the last request is processed.
-    */
     case COMMENTS_REQUEST: {
       const {comments} = action;
       const{isFetching} = state['comments'];
@@ -42,6 +38,34 @@ const ui = (state = {}, action) => {
           ...comments,
           isFetching: !isFetching
         }
+      }
+    }
+
+    case CATEGORIES_REQUEST: {
+      const {categories} = action;
+      const {isFetching} = state['categories'];
+
+      return {
+        ...state,
+        categories: {
+          ...categories,
+          isFetching: !isFetching
+        }
+      }
+    }
+
+    default:
+      return state;
+  }
+}
+
+const categories = (state = {}, action) => {
+  switch (action.type){
+    case GET_CATEGORIES: {
+      const {categories} = action;
+
+      return {
+        ...categories,
       }
     }
 
@@ -59,6 +83,7 @@ const ui = (state = {}, action) => {
  */
 const posts = (state = {}, action) => {
   switch (action.type){
+
     //Fetches all posts.
     case GET_POSTS: {
         const {posts} = action;
@@ -216,5 +241,6 @@ export default combineReducers({
   posts,
   comments,
   ui,
+  categories,
 });
 
