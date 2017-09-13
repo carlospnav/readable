@@ -30,8 +30,23 @@ class PostsList extends Component{
     const {sortBy, handleSortBy} = this.state;
 
     return (
-      <section> 
-        <OrderBySelect options={['voteScore', 'timestamp']} comparer={this.state.comparer} cb={handleSortBy} />
+      (posts) && (
+        <section> 
+          <OrderBySelect options={['voteScore', 'timestamp']} comparer={this.state.comparer} cb={handleSortBy} />
+          <button>New Post</button>
+          {posts.sort(sortBy).map((post) => (
+              <article>
+                <h3>{post.title}</h3>
+                <h6>{post.author}</h6>
+                <p>{post.body}</p>
+                <h1>{post.voteScore}</h1>
+              </article>
+            )
+          )}
+        </section>
+      )
+        /* <OrderBySelect options={['voteScore', 'timestamp']} comparer={this.state.comparer} cb={handleSortBy} />
+        <button>New Post</button>
         {(posts) && (posts.sort(sortBy).map((post) => {
             return (
               <article>
@@ -42,8 +57,8 @@ class PostsList extends Component{
               </article>
             )
           }))
-        }
-      </section>
+        } */
+
     )
   }
 }

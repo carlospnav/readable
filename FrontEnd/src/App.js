@@ -1,14 +1,23 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
-// import { performRequestIfAble } from './actions';
-import Root from './components'
+import { Route, Redirect } from 'react-router-dom';
+import Root from './components/views/Root';
+import CategoryError from './components/error/CategoryError';
 
-const App = () => {
+const App = ({match}) => {
     return (
       <div className="App">
         <Route exact path="/" render={() => (
-          <Root />
-         )} />
+          <Redirect to="/category" />
+        )} />
+
+        <Route exact path="/category" component={Root} />
+        <Route path="/category/:category" component={Root} />
+        <Route exact path="/categoryError" component={CategoryError} />
+
+        <Route exact path="/edit" render={() => (
+          <div>EDITADO</div>
+        )} />
+        {/* <Route path="/category" /> */}
       </div>
       /*<p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.

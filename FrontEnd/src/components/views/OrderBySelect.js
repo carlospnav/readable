@@ -10,10 +10,6 @@ const OrderBySelect = ({options, comparer, cb}) => {
         })}
       </select>
     )    
-
-      /* <option value="timeStamp">Currently Reading</option>
-      <option value="voteScore">Want to Read</option> */
-
   )
 }
 
