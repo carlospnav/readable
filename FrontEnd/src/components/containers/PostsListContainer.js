@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { performRequestIfAble, GET_POSTS } from '../../actions'
+import { performRequestIfAble, GET_POSTS, VOTE_POST } from '../../actions'
 import PostsList from '../views/PostsList';
 
 const POSTS = 'posts';
 
 class PostsListContainer extends Component {
-  constructor(props){
-    super(props);
+  //used arrow function to avoid having to bind the function in the state to access this properly.
+  handleVote = ({id, vote}) => {
+    this.props.dispatch(performRequestIfAble(VOTE_POST, POSTS, {id, option: vote}));
   }
 
   componentDidMount(){
@@ -24,7 +25,7 @@ class PostsListContainer extends Component {
     //rethink this maybe to account for /category/LOLLERSKATES or whatever
     if (keys.length === 0)
       return null;
-    console.log(CategoriesArr);
+
     filteredPosts = keys.map((id) => {
       return posts[id];
     });
@@ -46,26 +47,14 @@ class PostsListContainer extends Component {
   render(){
 
     return(
-      <PostsList posts={this.processPosts()} />
+      <PostsList posts={this.processPosts()} voteCb={this.handleVote} />
     )
   }
 }
 
 const mapStateToProps = (state) => {
   const { posts, categories } = state;
-  // const keys = Object.keys(posts), newPosts = [];
 
-  // if (keys.length === 0)
-  //   return {
-  //     posts: null
-  //   }
-
-  //   console.log(props);
-  // return {
-  //   posts: keys.map((id) => {
-  //     return posts[id];
-  //   })
-  // }
   return {
     posts,
     categories

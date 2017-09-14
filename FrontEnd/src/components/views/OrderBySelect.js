@@ -5,8 +5,8 @@ const OrderBySelect = ({options, comparer, cb}) => {
   return (
     (options) && (
       <select onChange={ (event) => (cb(event)) } value={ comparer } >
-        {options.map((option) => {
-          return <option value={option}> Sort by {option} </option>
+        {options.map((option, index) => {
+          return <option key={index} value={option}> Sort by {option} </option>
         })}
       </select>
     )    

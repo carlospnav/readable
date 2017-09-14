@@ -1,5 +1,13 @@
 @import url('https://fonts.googleapis.com/css?family=Lato|Anton|Open+Sans+Condensed:300,300i,700');
 
+@import url('http://weloveiconfonts.com/api/?family=entypo');
+
+/* entypo */
+[class*="entypo-"]:before {
+  font-family: 'entypo', sans-serif;
+}
+
+
 *{
   box-sizing: border-box;
 }
@@ -20,12 +28,33 @@ select{
   padding: 5px 0 5px 5px;
 }
 
-.post-body, .post-title, .category, .info, .post-header, select{
+form{
+  margin: 0 60px;
+  background-color: #eff3ff;
+  padding: 40px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.post-body, .post-title, .nav-menu-item, .info, .post-header, select, .post-form-label{
   font-family: 'Open Sans Condensed';
 }
 
-.app-title{
+.post-vote, .app-title{
   font-family: 'Anton';
+}
+
+header{
+  width: 100%;
+  height: 64px;
+  background-color: darkslateblue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 60px;
+}
+
+.app-title{
   font-size: 32px;
   font-weight: 100;
   color: white;
@@ -34,26 +63,27 @@ select{
 }
 
 .categories{ 
-  width: 100%;
-  padding-bottom: 25px;
+  position: relative;
+  height: 64px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .category-navigation{
   width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px 0;
-  margin-bottom: 25px;
-  background-color: darkslateblue;
+
 }
 
 .info{
+  position: absolute;
   font-size: 18px;
   text-align: center;
+  bottom: -40px;
 }
 
-.category, .new-post{
+.category, .button{
   text-decoration: none;
 }
 
@@ -88,9 +118,7 @@ select{
   font-weight: 700;
   margin-left: 10px;
   padding: 11px;
-}
-
-.new-post{
+  border: none;
   background-color: darkslateblue;
   color: white;
 }
@@ -104,19 +132,54 @@ select{
   box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
 }
 
-.post-vote{
-  width: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .post-body, .post-header{
   padding: 20px;
 }
 
 .post-title, .post-header, .post-body{
   width: 100%;
+}
+
+.post-header{
+  position: relative;
+  font-size: 22px;
+  font-weight: 100;
+  height: 200px;
+  color: white;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  background: url('./cssImages/react-alt.png');
+  background-size: cover;
+}
+
+.post-vote{
+  width: 80px;
+  font-size: 22px;
+  align-self: flex-start;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.post-vote > h4{
+  font-weight: 100;
+}
+
+.entypo-thumbs-down{
+  position: relative;
+  top: 2px;
+}
+
+.like-thumbs{
+  font-size: 20px;
+  color: white;
+  border: none;
+  background: none;
+  cursor: pointer;
+  outline: inherit;
+  padding: 0 12px;
 }
 
 .post-title{
@@ -140,16 +203,45 @@ select{
   padding: 20px;
 }
 
-.post-header{
-  font-size: 22px;
-  font-weight: 100;
-  height: 200px;
+.form-title{
   color: white;
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
-  background: url('./cssImages/react-alt.png');
-  background-size: cover;
+  font-weight: 100;
+  font-size: 20px;
 }
 
+.post-form-input{
+  height: 40px;
+  margin: 20px;
+  padding: 0 10px;
+  flex: 1;
+  border: 1px solid #cbaed0;
+}
+
+.post-form-select, .post-form-label{
+  height: 40px;
+}
+
+.post-form-select{
+  margin: 20px;
+}
+
+.post-form-label{
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 36px;
+  color: darkslateblue;
+  margin: 20px 0 20px 20px;
+}
+
+.form-button{
+  height: 40px;
+  margin: 20px 0 0 20px;
+  background-color: lightcoral;
+}
+
+.post-body-input{
+  min-width: calc(100% - 40px);
+  min-height: 260px;
+  padding: 10px;
+}
 

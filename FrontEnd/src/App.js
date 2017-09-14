@@ -1,7 +1,11 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import Root from './components/views/Root';
 import CategoryError from './components/error/CategoryError';
+import CreatePostContainer from './components/containers/CreatePostContainer';
+import EditPostContainer from './components/containers/EditPostContainer';
+import CategoriesContainer from './components/containers/CategoriesContainer';
+import PostsListContainer from './components/containers/PostsListContainer';
+
 
 const App = ({match}) => {
     return (
@@ -9,14 +13,23 @@ const App = ({match}) => {
         <Route exact path="/" render={() => (
           <Redirect to="/category" />
         )} />
+        <header>
+          <h2 className="app-title"> Readable </h2>
+          <Route exact path="/category" component={CategoriesContainer} />
+          <Route path="/category/:category" component={CategoriesContainer} />
+          
+          <Route exact path="/create/post" render={() => (
+            <h2 className="form-title nav-menu-item">Create Post</h2>
+          )} />
+        </header>
 
-        <Route exact path="/category" component={Root} />
-        <Route path="/category/:category" component={Root} />
+        <Route exact path="/category" component={PostsListContainer} />
+        <Route path="/category/:category" component={PostsListContainer} />
+
+        <Route exact path="/create/post" component={CreatePostContainer} />
+        <Route path="/edit/post/:id" component={CreatePostContainer} />
+
         <Route exact path="/categoryError" component={CategoryError} />
-
-        <Route exact path="/edit" render={() => (
-          <div>EDITADO</div>
-        )} />
         {/* <Route path="/category" /> */}
       </div>
       /*

@@ -6,10 +6,6 @@ import Categories from '../views/Categories';
 const CATEGORIES = 'categories';
 
 class CategoriesContainer extends Component{
-  constructor(props){
-    super(props)
-  }
-
 
   componentDidMount = () => {
     this.props.dispatch(performRequestIfAble(GET_CATEGORIES, CATEGORIES));
