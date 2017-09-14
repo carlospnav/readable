@@ -3,12 +3,15 @@ import { Link } from 'react-router-dom';
 
 const Categories = ({categories}) => {
   return (
-    <section>
-      <h2> Categories </h2>
-      {(categories) && (
-        categories.map(category => <Link to={`/category/${category}`}>{category}</Link>)
-      )}
-      <p>Select a category to be taken to its view.</p>
+    <section className="categories">
+      <nav className="category-navigation">
+        <h2 className="app-title"> Readable </h2>
+        {(categories) && (
+          categories.map(category => <Link className="category" to={`/category/${category}`}>{category}</Link>)
+        )}
+        <Link className="category" to="/category">all posts</Link>
+      </nav>
+      <p className="info">Select a category above to filter the posts.</p>
     </section>
   )
 }

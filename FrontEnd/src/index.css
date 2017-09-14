@@ -1,5 +1,155 @@
+@import url('https://fonts.googleapis.com/css?family=Lato|Anton|Open+Sans+Condensed:300,300i,700');
+
+*{
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
 }
+
+h1,h2,h3,h4,h5,h6,p{
+  margin: 0;
+}
+
+select{
+  font-size: 20px;
+  font-weight: 100;
+  padding: 5px 0 5px 5px;
+}
+
+.post-body, .post-title, .category, .info, .post-header, select{
+  font-family: 'Open Sans Condensed';
+}
+
+.app-title{
+  font-family: 'Anton';
+  font-size: 32px;
+  font-weight: 100;
+  color: white;
+  position: absolute;
+  left: 20px;
+}
+
+.categories{ 
+  width: 100%;
+  padding-bottom: 25px;
+}
+
+.category-navigation{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+  margin-bottom: 25px;
+  background-color: darkslateblue;
+}
+
+.info{
+  font-size: 18px;
+  text-align: center;
+}
+
+.category, .new-post{
+  text-decoration: none;
+}
+
+.category{
+  font-size: 22px;
+  font-weight: 100;
+  color: white;
+
+  margin: 0 15px;
+}
+
+.posts-list{
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.posts-list-navigation{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 20px;
+}
+
+.posts-list-navigation > select{
+  margin-right: 10px;
+}
+
+.button{
+  font-size: 14px;
+  font-weight: 700;
+  margin-left: 10px;
+  padding: 11px;
+}
+
+.new-post{
+  background-color: darkslateblue;
+  color: white;
+}
+
+.post{
+  margin: 10px;
+  width: 450px;
+  display: flex;
+  flex-flow: column wrap;
+  border-radius: 2px;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
+}
+
+.post-vote{
+  width: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.post-body, .post-header{
+  padding: 20px;
+}
+
+.post-title, .post-header, .post-body{
+  width: 100%;
+}
+
+.post-title{
+  font-family: 'Lato';
+  height: 60px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(0,0,0, .1);
+}
+
+.post-title > h6{
+  font-size: 16px;
+  font-weight: 100;
+  font-style: italic;
+}
+
+.post-body{
+  font-size: 19px;
+  height: 150px;
+  padding: 20px;
+}
+
+.post-header{
+  font-size: 22px;
+  font-weight: 100;
+  height: 200px;
+  color: white;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  background: url('./cssImages/react-alt.png');
+  background-size: cover;
+}
+
+

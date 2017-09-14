@@ -19,9 +19,7 @@ const App = ({match}) => {
         )} />
         {/* <Route path="/category" /> */}
       </div>
-      /*<p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+      /*
         <button onClick={ () => { this.props.dispatch(performRequestIfAble(GET_POSTS, 'posts')) }} >INIT</button>
         <button onClick={ () => { this.props.dispatch(performRequestIfAble(ADD_POST, 'posts', { id:1, timestamp: 1467166872634, title: 'some title', body: 'some body', author: 'some author', category: 'udacity' })) }}> ADD </button>
         <button onClick={ () => { this.props.dispatch(performRequestIfAble(EDIT_POST, 'posts', { id:1, timestamp: 1467166872634, title: 'lololol', body: 'some body', author: 'some author', category: 'udacity' })) }}> EDIT </button>

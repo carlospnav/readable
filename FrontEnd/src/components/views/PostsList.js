@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import OrderBySelect from './OrderBySelect';
 
 
@@ -31,15 +32,22 @@ class PostsList extends Component{
 
     return (
       (posts) && (
-        <section> 
-          <OrderBySelect options={['voteScore', 'timestamp']} comparer={this.state.comparer} cb={handleSortBy} />
-          <button>New Post</button>
+        <section className="posts-list"> 
+          <nav className="posts-list-navigation">
+            <OrderBySelect options={['voteScore', 'timestamp']} comparer={this.state.comparer} cb={handleSortBy} />
+            <Link className="new-post button" to="/post">New Post</Link>
+          </nav>
           {posts.sort(sortBy).map((post) => (
-              <article>
-                <h3>{post.title}</h3>
-                <h6>{post.author}</h6>
-                <p>{post.body}</p>
-                <h1>{post.voteScore}</h1>
+              <article className="post">
+                <div className="post-header title">
+                  <h3>{`${post.author[0].toUpperCase()}${post.author.slice(1)}`}</h3>
+                </div>
+                <div className="post-title">
+                  <h6>{post.title}</h6>
+                </div>
+                <div className="post-body">
+                  <p>{post.body}</p>
+                </div>
               </article>
             )
           )}

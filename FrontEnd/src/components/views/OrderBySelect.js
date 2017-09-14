@@ -6,7 +6,7 @@ const OrderBySelect = ({options, comparer, cb}) => {
     (options) && (
       <select onChange={ (event) => (cb(event)) } value={ comparer } >
         {options.map((option) => {
-          return <option value={option}> Compare by {option} </option>
+          return <option value={option}> Sort by {option} </option>
         })}
       </select>
     )    
