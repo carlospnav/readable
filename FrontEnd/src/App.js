@@ -1,8 +1,7 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import CategoryError from './components/error/CategoryError';
-import CreatePostContainer from './components/containers/CreatePostContainer';
-import EditPostContainer from './components/containers/EditPostContainer';
+import CreatePostContainer from './components/containers/CreateOrEditPostContainer';
 import CategoriesContainer from './components/containers/CategoriesContainer';
 import PostsListContainer from './components/containers/PostsListContainer';
 
@@ -21,6 +20,9 @@ const App = ({match}) => {
           <Route exact path="/create/post" render={() => (
             <h2 className="form-title nav-menu-item">Create Post</h2>
           )} />
+          <Route path="/edit/post/:id" render={() => (
+            <h2 className="form-title nav-menu-item">Edit Post</h2>
+          )} />
         </header>
 
         <Route exact path="/category" component={PostsListContainer} />
@@ -30,11 +32,12 @@ const App = ({match}) => {
         <Route path="/edit/post/:id" component={CreatePostContainer} />
 
         <Route exact path="/categoryError" component={CategoryError} />
-        {/* <Route path="/category" /> */}
+
       </div>
+      
+      
       /*
         <button onClick={ () => { this.props.dispatch(performRequestIfAble(GET_POSTS, 'posts')) }} >INIT</button>
-        <button onClick={ () => { this.props.dispatch(performRequestIfAble(ADD_POST, 'posts', { id:1, timestamp: 1467166872634, title: 'some title', body: 'some body', author: 'some author', category: 'udacity' })) }}> ADD </button>
         <button onClick={ () => { this.props.dispatch(performRequestIfAble(EDIT_POST, 'posts', { id:1, timestamp: 1467166872634, title: 'lololol', body: 'some body', author: 'some author', category: 'udacity' })) }}> EDIT </button>
         <button onClick={ () => { this.props.dispatch(performRequestIfAble(DELETE_POST, 'posts', 1)) }}> DELETE </button>
         <button onClick={ () => { this.props.dispatch(performRequestIfAble(VOTE_POST, 'posts', { id: 1, option: 'upVote' })) }}> VOTE </button>
@@ -62,24 +65,5 @@ const App = ({match}) => {
         </ul> */
   );
 }
-
-// const mapStateToProps = (state) => {
-//   let {posts, comments} = state;
-//   const ObjToArr = (entity) => {
-//     entity ?
-//       entity = Object.keys(entity).map((entityId) => {
-//         return entity[entityId];
-//       }) :
-//       entity = [];
-//     return entity;
-//   };
-
-//   return {
-//     posts: ObjToArr(posts),
-//     comments: ObjToArr(comments),
-//   }
-// }
-
-// export default connect(mapStateToProps)(App);
 
 export default App;

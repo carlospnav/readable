@@ -15,28 +15,6 @@ export const GET_CATEGORIES = 'GET_CATEGORIES';
 
 const endpoint = 'http://localhost:5001/';
 
-
-// class Entry {
-//   constructor(body, author){
-//     this.body = body;
-//     this.author = author;
-//   }
-// }
-
-// class Post extends Entry{
-//   constructor(title, body, author){
-//     super(body, author);
-//     this.title = title;
-//   }
-// }
-
-// class Comment extends Entry{
-//   constructor(body, author){
-//     super(body, author);
-//   }
-// }
-
-//NEEDS RECEIVED AT
 const makeRequest = (entity) =>{
   entity = entity.toUpperCase();
 

@@ -1,12 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import Proptypes from 'prop-types';
+import { withRouter } from 'react-router';
 import { performRequestIfAble, GET_POSTS, VOTE_POST } from '../../actions'
 import PostsList from '../views/PostsList';
 
 const POSTS = 'posts';
 
-class PostsListContainer extends Component {
+class UnrouteredPostsListContainer extends Component {
+
+  static propTypes = {
+    history: Proptypes.object.isRequired
+  }
+
   //used arrow function to avoid having to bind the function in the state to access this properly.
   handleVote = ({id, vote}) => {
     this.props.dispatch(performRequestIfAble(VOTE_POST, POSTS, {id, option: vote}));
@@ -39,7 +45,7 @@ class PostsListContainer extends Component {
       : filteredPosts;
 
     if (!filteredPosts)
-      <Redirect to="/categoryError"/>
+      this.props.history.push('/categoryError');
     
     return filteredPosts;
   }
@@ -61,4 +67,5 @@ const mapStateToProps = (state) => {
   }
 }
 
+const PostsListContainer = withRouter(UnrouteredPostsListContainer);
 export default connect(mapStateToProps)(PostsListContainer);

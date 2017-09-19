@@ -4,6 +4,7 @@ import OrderBySelect from './OrderBySelect';
 
 
 class PostsList extends Component{
+
   constructor(props) {
     super(props);
 
@@ -52,7 +53,6 @@ class PostsList extends Component{
                 <div className="post-body">
                   <p>{post.body}</p>
                 </div>
-                <Link className="new-post button" to={`/edit/post/${post.id}`}>Edit Post</Link>
               </article>
             )
           )}

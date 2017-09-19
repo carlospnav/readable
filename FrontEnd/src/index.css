@@ -28,12 +28,18 @@ select{
   padding: 5px 0 5px 5px;
 }
 
+.post-form{
+  display: flex;
+  justify-content: center;
+}
+
 form{
   margin: 0 60px;
   background-color: #eff3ff;
   padding: 40px;
   display: flex;
   flex-wrap: wrap;
+  max-width: 800px;
 }
 
 .post-body, .post-title, .nav-menu-item, .info, .post-header, select, .post-form-label{
@@ -209,12 +215,27 @@ header{
   font-size: 20px;
 }
 
+.validation-box{
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.post-form-input, .post-body-input{
+  border: 1px solid #cbaed0;
+  margin: 20px;
+}
+
 .post-form-input{
   height: 40px;
-  margin: 20px;
   padding: 0 10px;
-  flex: 1;
-  border: 1px solid #cbaed0;
+}
+
+.post-body-input{
+  min-width: calc(100% - 40px);
+  min-height: 260px;
+  padding: 10px;
 }
 
 .post-form-select, .post-form-label{
@@ -239,9 +260,14 @@ header{
   background-color: lightcoral;
 }
 
-.post-body-input{
-  min-width: calc(100% - 40px);
-  min-height: 260px;
-  padding: 10px;
+.textarea-box{
+  width: 100%;
+}
+
+.error-validation{
+  width: 100%;
+  font-size: 11px;
+  color: red;
+  margin: 0;
 }
 
