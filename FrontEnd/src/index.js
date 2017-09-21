@@ -9,6 +9,6 @@ import './index.css';
   ReactDOM.render(
     <BrowserRouter>
       <Provider store={store}>
-        <App />
+        <App initializer={store.dispatch}/>
       </Provider>
     </BrowserRouter>, document.getElementById('root'));

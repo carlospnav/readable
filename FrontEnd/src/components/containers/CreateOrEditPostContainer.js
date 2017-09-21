@@ -4,7 +4,7 @@ import { withRouter } from 'react-router';
 import Proptypes from 'prop-types';
 import uuidv4 from 'uuid/v4';
 import PostForm from '../views/PostForm'
-import { performRequestIfAble, GET_CATEGORIES, GET_POSTS , ADD_POST} from '../../actions';
+import { performRequestIfAble, ADD_POST, EDIT_POST} from '../../actions';
 
 const CATEGORIES = 'categories';
 const POSTS = 'posts';
@@ -42,19 +42,12 @@ class UnrouteredCreateOrEditPostContainer extends Component {
     }
   }
 
-  /* If posts or categories haven't been loaded upon mounting the component,
-  loads them into the store and sends them via props to the component, along with
-  the post to edit if such is the case.
+  /* If the form required is the Edit Post, adds the post to edit to the state
+  of this controlled Form component.
   */
   componentDidMount(){
     const {id} = this.props.match.params;
     const {posts} = this.props;
-
-    if (!this.shouldFetch(CATEGORIES))
-      this.props.dispatch(performRequestIfAble(GET_CATEGORIES, CATEGORIES));
-
-    if (!this.shouldFetch(POSTS))
-      this.props.dispatch(performRequestIfAble(GET_POSTS, POSTS));
 
     if (id) {
       const post = posts[id];
@@ -66,7 +59,7 @@ class UnrouteredCreateOrEditPostContainer extends Component {
   /* Checks whether or not the entity has been loaded into the component
   via Redux's mapStateToProps.
   */
-  shouldFetch(type){
+  areLoaded(type){
     const entity = this.props[type];
 
     return (Object.keys(entity).length > 0) ? true : false;
@@ -149,6 +142,7 @@ class UnrouteredCreateOrEditPostContainer extends Component {
     if (errors['author'].length === 0 && errors['title'].length === 0 && errors['body'].length === 0){
       let newPost;
 
+      console.log(match.path);
       //Routing switch.
       switch(match.path){
         case '/create/post': {
@@ -168,6 +162,10 @@ class UnrouteredCreateOrEditPostContainer extends Component {
           this.props.dispatch(performRequestIfAble(ADD_POST, POSTS, newPost));
           break;
         }
+        case '/edit/post/:id': {
+          this.props.dispatch(performRequestIfAble(EDIT_POST, POSTS, post));
+          break;
+        }
         default:
           console.log('What? How? How did you get here? I don\'t understand.');
           break;
@@ -185,7 +183,7 @@ class UnrouteredCreateOrEditPostContainer extends Component {
     const {errors, post} = this.state;
 
     return (
-      (this.shouldFetch(CATEGORIES)) && (
+      (this.areLoaded(CATEGORIES)) && (
         <PostForm 
           post={post} 
           categories={Object.keys(categories)} 

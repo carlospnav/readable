@@ -1,32 +1,26 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { performRequestIfAble, GET_CATEGORIES } from '../../actions'
 import Categories from '../views/Categories';
 
-const CATEGORIES = 'categories';
+/* Container component connected to the store that
+gets the categories from it, transforms into an array
+and passes it down to the Categories presentational component. 
+*/
+const CategoriesContainer = ({categories}) => {
 
-class CategoriesContainer extends Component{
-
-  componentDidMount = () => {
-    this.props.dispatch(performRequestIfAble(GET_CATEGORIES, CATEGORIES));
-  }
-
-  //DONE OUTSIDE MAPSTATETOPROPS to avoid redux re-rendering component multiple times due to perceived change in the store.
-  processCategories = () => {
-    const { categories } = this.props;
+  /* Transforms the categories object from the store into
+  an array that can be iterated upon to generate categories 
+  in the child component.
+  */
+  const processCategories = () => {
     const categoriesArr = Object.keys(categories);
     
-      if (categoriesArr.length === 0)
-        return categoriesArr;
-      
-      return categoriesArr;
+    return categoriesArr;
   }
 
-  render() { 
-    return (
-      <Categories categories={this.processCategories()} />
-    )
-  }
+  return (
+    <Categories categories={processCategories()}  />
+  )
 }
 
 const mapStateToProps = (state) => {

@@ -1,61 +1,51 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import Proptypes from 'prop-types';
 import { withRouter } from 'react-router';
-import { performRequestIfAble, GET_POSTS, VOTE_POST } from '../../actions'
+import PropTypes from 'prop-types';
 import PostsList from '../views/PostsList';
 
-const POSTS = 'posts';
+const UnrouteredPostsListContainer = ({dispatch, history, posts, match, categories}) => {
+  const categoriesArr = Object.keys(categories);
+  const postsArr = Object.keys(posts).map((id) => {
+    return posts[id];
+  });
 
-class UnrouteredPostsListContainer extends Component {
-
-  static propTypes = {
-    history: Proptypes.object.isRequired
-  }
-
-  //used arrow function to avoid having to bind the function in the state to access this properly.
-  handleVote = ({id, vote}) => {
-    this.props.dispatch(performRequestIfAble(VOTE_POST, POSTS, {id, option: vote}));
-  }
-
-  componentDidMount(){
-    this.props.dispatch(performRequestIfAble(GET_POSTS, POSTS))
-  }
-
-  processPosts(){
-    const { posts, match, categories } = this.props;
-    const keys = Object.keys(posts);
-    const CategoriesArr = Object.keys(categories);
+  /* Transforms both the categories and the posts from the store
+  into arrays. Then, looks for the category routing parameter passed
+  down from Router that represents the specific category linked to by
+  the URL and returns a filtered list of posts depending that parameter.
+  */
+  const processPosts = () =>{
     let filteredPosts;
-  
-    //rethink this maybe to account for /category/LOLLERSKATES or whatever
-    if (keys.length === 0)
-      return null;
 
-    filteredPosts = keys.map((id) => {
-      return posts[id];
-    });
-
+    /* Filters the posts array by category. If the category in the URL isn't 
+    in the array of existing categories, returns null to allow PostsList to 
+    redirect to an error page.
+    */
     filteredPosts = (match.params.category) ? 
       (
-        (CategoriesArr.includes(match.params.category)) ? 
-        filteredPosts.filter((post) => { return post.category === match.params.category}) 
+        (categoriesArr.includes(match.params.category)) ? 
+        postsArr.filter((post) => { return post.category === match.params.category}) 
         : null
       )
-      : filteredPosts;
+    : postsArr;
 
-    if (!filteredPosts)
-      this.props.history.push('/categoryError');
-    
     return filteredPosts;
   }
 
-  render(){
-
-    return(
-      <PostsList posts={this.processPosts()} voteCb={this.handleVote} />
+  /* PostsList will not render unless categories and posts have been loaded.
+  This allows PostsList to redirect to Error Page before mounting, if the posts 
+  it receives are null.
+  */
+  return(
+    (categoriesArr.length > 0 && postsArr.length > 0) && (
+      <PostsList posts={processPosts()} history={history} />
     )
-  }
+  )
+}
+
+UnrouteredPostsListContainer.propTypes = {
+  history: PropTypes.object.isRequired
 }
 
 const mapStateToProps = (state) => {

@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import OrderBySelect from './OrderBySelect';
+import PostThumb from './PostThumb';
 
-
+/* Presentational component that displays the list of posts. It holds
+UI properties in the state, while the posts are passed down by the container
+component.
+*/
 class PostsList extends Component{
 
   constructor(props) {
@@ -14,6 +18,15 @@ class PostsList extends Component{
     }
   }
 
+  /* Redirects to Error Page if post comes null, which indicates
+  that the category linked to in the URL does not exist.
+  */
+  componentWillMount(){
+    if (this.props.posts === null)
+      this.props.history.push('/categoryError');
+  }
+
+  // Sorts by the comparer value in descending order.
   sortBy(a, b){
     const {comparer} = this.state;
 
@@ -21,13 +34,13 @@ class PostsList extends Component{
   }
 
   handleSortBy = (event) => {
-
     const comparer = event.currentTarget.value;
+
     this.setState({comparer})
   }
 
   render(){
-    const {posts, voteCb} = this.props;
+    const {posts} = this.props;
     const {sortBy} = this.state;
 
     return (
@@ -38,22 +51,7 @@ class PostsList extends Component{
             <Link className="new-post button" to="/create/post">New Post</Link>
           </nav>
           {posts.sort(sortBy).map((post) => (
-              <article key={post.id} className="post">
-                <div className="post-header title">
-                  <div className="post-vote">
-                    <button onClick={() => voteCb({id:post.id , vote:'downVote' })} className="entypo-thumbs-down like-thumbs"></button>
-                    <h4>{post.voteScore}</h4>
-                    <button onClick={() => voteCb({id:post.id , vote:'upVote' })} className="entypo-thumbs-up like-thumbs"></button>
-                  </div>
-                  <h3>{`${post.author[0].toUpperCase()}${post.author.slice(1)}`}</h3>
-                </div>
-                <div className="post-title">
-                  <h6>{post.title}</h6>
-                </div>
-                <div className="post-body">
-                  <p>{post.body}</p>
-                </div>
-              </article>
+              <PostThumb key={post.id} post={post} isThumb={true} />
             )
           )}
         </section>

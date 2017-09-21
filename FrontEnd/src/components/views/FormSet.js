@@ -1,8 +1,7 @@
 import React from 'react';
 import ErrorValidation from './ErrorValidation';
 
-const FormSet = ({config}) => {
-  const { errorArr, onChangeHandler, field, value, specialClass, className, fieldType, placeholder } = config;
+const FormSet = ({ errorArr, onChangeHandler, field, value, specialClass, className, fieldType, placeholder }) => {
   const FormInputType = `${fieldType}`;
 
   return(

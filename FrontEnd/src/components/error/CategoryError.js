@@ -8,7 +8,7 @@ const CategoryError = () => {
   return (
     <section> 
       <p>Please supply a category to work with this app. Hint: 'all' retrieves all posts from all categories. </p>
-      <Link to="/category/all" >Return to Main page. </Link>
+      <Link to="/category" >Return to Main page. </Link>
     </section>
   )
 }

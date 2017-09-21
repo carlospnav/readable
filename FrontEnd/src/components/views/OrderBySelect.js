@@ -1,7 +1,6 @@
 import React from 'react';
 
 const OrderBySelect = ({options, comparer, cb}) => {
-
   return (
     (options) && (
       <select onChange={ (event) => (cb(event)) } value={ comparer } >

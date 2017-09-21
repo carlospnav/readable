@@ -42,11 +42,11 @@ form{
   max-width: 800px;
 }
 
-.post-body, .post-title, .nav-menu-item, .info, .post-header, select, .post-form-label{
+.post-body, .post-title, .nav-menu-item, .info, .post-header, select, .post-form-label, .post-detail, .comment-author, .comment-body{
   font-family: 'Open Sans Condensed';
 }
 
-.post-vote, .app-title{
+.vote, .app-title{
   font-family: 'Anton';
 }
 
@@ -129,13 +129,16 @@ header{
   color: white;
 }
 
-.post{
-  margin: 10px;
-  width: 450px;
+.entity{
   display: flex;
   flex-flow: column wrap;
   border-radius: 2px;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
+}
+
+.post-thumb{
+  margin: 10px 10px 40px 10px;
+  width: 450px;
 }
 
 .post-body, .post-header{
@@ -148,28 +151,26 @@ header{
 
 .post-header{
   position: relative;
-  font-size: 22px;
-  font-weight: 100;
+  font-size: 22px;;
   height: 200px;
   color: white;
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
+  justify-content: space-between;
   align-items: flex-end;
   background: url('./cssImages/react-alt.png');
   background-size: cover;
 }
 
-.post-vote{
+.vote{
   width: 80px;
   font-size: 22px;
-  align-self: flex-start;
-  position: absolute;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.post-vote > h4{
+.vote > h4{
   font-weight: 100;
 }
 
@@ -271,3 +272,82 @@ header{
   margin: 0;
 }
 
+.post-detail-container{
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.post-detail, .comments{
+  margin-bottom: 20px;
+}
+
+.post-detail{
+  width: 100%;
+  font-family: 'Open Sans Condensed';
+}
+
+.post-detail-text{
+  text-align: center;
+}
+
+.post-detail > h2{
+  font-size: 38px;
+}
+
+.post-detail > p{
+  font-size: 20px;
+}
+
+.comment-author{
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+  border-bottom: 1px solid rgba(0,0,0,.1);
+}
+
+.comment-author > h3{
+  font-style: italic;
+  font-weight: 600;
+}
+
+.comment-body{
+  font-size: 18px;
+  height: 100px;
+  padding: 10px;
+}
+
+.comment-body > h3{
+  font-weight: 100;
+}
+
+.comment-vote > button{
+  color: black;
+}
+
+.comment-vote{
+  font-size: 16px;
+}
+
+.comment-vote > .like-thumbs{
+  font-size: 18px;
+}
+
+.edit-post, .delete-post{
+  background-color: rgba(0,0,0,.1);
+}
+
+.return-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.return-button{
+  margin: 0 0 60px 0;
+}
+
+.comments-menu{
+
+}

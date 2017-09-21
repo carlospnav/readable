@@ -1,6 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+/* Presentational component that receives the categories and displays
+them in the page, along with links to select a category.
+*/
 const Categories = ({categories}) => {
   return (
     <section className="categories">
