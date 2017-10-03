@@ -33,9 +33,7 @@ function receiveEntity(json, actionType, entity, payload){
 
       items = json.reduce((items, item) => {
         let {name} = item;
-        items[name] = {
-          ...item
-        }
+        items[name] = name
         return items;
       }, {})
       break;
@@ -43,7 +41,6 @@ function receiveEntity(json, actionType, entity, payload){
 
     case 'posts':
     case 'comments':
-
       items = json.reduce((items, item) => {
         let {id} = item;
         items[id] = {

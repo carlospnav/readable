@@ -8,12 +8,13 @@ import { performRequestIfAble, ADD_POST, EDIT_POST} from '../../actions';
 
 const CATEGORIES = 'categories';
 const POSTS = 'posts';
+const COMMENTS = 'comments';
 
 /* An unroutered form built to Add or Edit a post to Redux's store. 
 Before being exported, it is routered in order to allow for redirection
 upon completion of the request.
 */
-class UnrouteredCreateOrEditPostContainer extends Component {
+class UnrouteredFormContainer extends Component {
 
   static propTypes = {
     history: Proptypes.object.isRequired
@@ -23,17 +24,8 @@ class UnrouteredCreateOrEditPostContainer extends Component {
     super(props);
 
     this.state = {
-      post: {
-        author: '',
-        title: '',
-        body: '',
-        category: 'react'
-      },
-      errors: {
-        author: [],
-        title: [],
-        body: []
-      },
+      entity: this.props.entity,
+      errors: this.props.errors,
       validationRules: {
         author: {maxLength: 20},
         title: {maxLength: 50},
@@ -89,7 +81,7 @@ class UnrouteredCreateOrEditPostContainer extends Component {
   adds them otherwise.
   */
   handleChange = (field, value) =>{
-    const {post, errors} = this.state;
+    const {entity, errors} = this.state;
 
     switch (field) {
       case 'author':
@@ -97,8 +89,8 @@ class UnrouteredCreateOrEditPostContainer extends Component {
       case 'body': {
         const errorArr = this.validate(field, value);
         this.setState({ 
-          post: {
-            ...post,
+          entity: {
+            ...entity,
             [field]: value,
           }, 
           errors: {
@@ -110,8 +102,8 @@ class UnrouteredCreateOrEditPostContainer extends Component {
       }
       case 'category':
         this.setState({
-          post:{
-            ...post,
+          entity:{
+            ...entity,
             [field]: value
           }
         });
@@ -130,40 +122,39 @@ class UnrouteredCreateOrEditPostContainer extends Component {
   */
   handleSubmit = (event) =>{
     event.preventDefault();
-    const {post} = this.state;
-    const {posts, match} = this.props;
+    const {entity} = this.state;
+    const {entities, match} = this.props;
     const {validationRules} = this.state;
     const errors = {};
 
     //Form validation.
     for (let field of Object.keys(validationRules))
-      errors[field] = this.validate(field, post[field]);
+      errors[field] = this.validate(field, entity[field]);
 
     if (errors['author'].length === 0 && errors['title'].length === 0 && errors['body'].length === 0){
-      let newPost;
+      let newEntity;
 
-      console.log(match.path);
       //Routing switch.
       switch(match.path){
         case '/create/post': {
-          const currentIds = Object.keys(posts);
+          const currentIds = Object.keys(entities);
           let id = uuidv4();
 
           while(currentIds.includes(id)) {
             id = uuidv4();
           }
-          newPost = {
-            ...post,
+          newEntity = {
+            ...entity,
             id: id,
             timestamp: Date.now(),
             votescore: 1,
             deleted: false
           }
-          this.props.dispatch(performRequestIfAble(ADD_POST, POSTS, newPost));
+          this.props.dispatch(performRequestIfAble(ADD_POST, POSTS, newEntity));
           break;
         }
         case '/edit/post/:id': {
-          this.props.dispatch(performRequestIfAble(EDIT_POST, POSTS, post));
+          this.props.dispatch(performRequestIfAble(EDIT_POST, POSTS, entity));
           break;
         }
         default:
@@ -179,18 +170,37 @@ class UnrouteredCreateOrEditPostContainer extends Component {
   }
 
   render() {
-    const {categories} = this.props;
-    const {errors, post} = this.state;
+    const {categories, type} = this.props;
+    const {errors, entity} = this.state;
 
     return (
-      (this.areLoaded(CATEGORIES)) && (
-        <PostForm 
-          post={post} 
-          categories={Object.keys(categories)} 
-          errors={errors}
-          cbs={{handleChange: this.handleChange,
-                handleSubmit: this.handleSubmit}} 
-        />
+      (this.areLoaded(CATEGORIES) && 
+        (
+          (type === 'posts') && (
+            <PostForm 
+              post={entity} 
+              categories={Object.keys(categories)} 
+              errors={errors}
+              cbs={{handleChange: this.handleChange,
+                    handleSubmit: this.handleSubmit}} 
+            />)
+          (type === 'comments') && (<div>Comments</div>)
+          // (type === 'posts') && (
+          //   <PostForm 
+          //     post={entity} 
+          //     categories={Object.keys(categories)} 
+          //     errors={errors}
+          //     cbs={{handleChange: this.handleChange,
+          //           handleSubmit: this.handleSubmit}} 
+          //   />) 
+          // ||
+          // (false) && ( <div>iou</div>)
+        //   (type === 'comments') && (
+        //     <div>
+        //       Oi Comment.
+        //     </div>
+        //   )
+        )
       )
     )
   }
@@ -205,5 +215,5 @@ const mapStateToProps = (state) => {
   }
 }
 
-const CreateOrEditPostContainer = withRouter(UnrouteredCreateOrEditPostContainer);
-export default connect(mapStateToProps)(CreateOrEditPostContainer);
+const FormContainer = withRouter(UnrouteredFormContainer);
+export default connect(mapStateToProps)(FormContainer);

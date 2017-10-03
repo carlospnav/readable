@@ -19,22 +19,24 @@ const PostThumb = ({post, isThumb, handleVote, deletePost}) => {
             <button onClick={() => handleVote({id:post.id , type: POSTS, vote:'upVote' })} className="entypo-thumbs-up like-thumbs"></button>
           )}
         </div>
-        {(!isThumb) && (
-          <Link className="edit-post button" to={`/edit/post/${post.id}`}>Edit Post</Link>
-        )}
-        {(!isThumb) && (
-          <button className="delete-post button" onClick={() => deletePost(post.id)}>Delete Post</button>
-        )}
         <h3>{`${post.author[0].toUpperCase()}${post.author.slice(1)}`}</h3>
       </div>
       <div className="post-title">
         <h6>{post.title}</h6>
+        <div className="content-menu post-menu">
+          {(!isThumb) && (
+            <Link className="content-icon entypo-pencil" to={`/edit/post/${post.id}`}/>
+          )}
+          {(!isThumb) && (
+            <button className="content-icon entypo-cancel-circled" onClick={() => deletePost(post.id)}/>
+          )}
+        </div>
       </div>
       <div className="post-body">
         <p>{post.body}</p>
       </div>
       {(isThumb) && (
-        <Link to={`/details/${post.id}`}>Details</Link> /*REWORK THIS!!!! Make it link on the img.*/
+        <Link className="details-button button" to={`/details/${post.id}`}>Details</Link> /*REWORK THIS!!!! Make it link on the img.*/
       )}
     </article>
   )

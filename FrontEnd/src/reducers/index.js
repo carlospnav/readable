@@ -64,6 +64,8 @@ const categories = (state = {}, action) => {
     case GET_CATEGORIES: {
       const {categories} = action;
 
+      console.log(categories)
+
       return {
         ...categories,
       }
@@ -84,13 +86,17 @@ const categories = (state = {}, action) => {
 const posts = (state = {}, action) => {
   switch (action.type){
 
-    //Fetches all posts.
+    /* Fetches all posts that aren't flagged as deleted
+    in the Back-End.
+    */
     case GET_POSTS: {
         const {posts} = action;
 
-        return {
-          ...posts,
-        }  
+        return Object.values(posts).reduce((acc, item) => {
+          if (!item.deleted)
+            acc[item.id] = item;
+          return acc;
+        }, {}); 
       }
 
     //Creates a post.
@@ -107,9 +113,16 @@ const posts = (state = {}, action) => {
       }
     }
       
-    //Edits a post.
+    /* Edits a post. If the post to be edited was flagged
+    as deleted, returns the state without the edited post. This
+    is an edge case when a user arrives at the Edit post form via 
+    direct URL with the post Id. 
+    */
     case EDIT_POST: {
         const {payload} = action;
+
+        if (payload.deleted)
+          return state;
 
         return{
           ...state,
@@ -121,19 +134,19 @@ const posts = (state = {}, action) => {
       }
 
     /*
-      Deletes a post. Payload is the Id of the post to
+      Filters a post out of the store. Payload is the Id of the post to
       be deleted 
     */
     case DELETE_POST: {
       const{payload} = action;
       
-      return{
-        ...state,
-        [payload]: {
-          ...state[payload],
-          deleted: true
-        }
-      }
+      const filteredPosts = Object.values(state).reduce((acc, item) => {
+        if (item.id !== payload)
+          acc[item.id] = item;
+        return acc;
+      }, {});
+      
+      return filteredPosts;
     }
 
     case VOTE_POST: {
@@ -209,14 +222,14 @@ const comments = (state = {}, action) => {
 
     case DELETE_COMMENT: {
         const {payload} = action;
-        
-        return{
-          ...state,
-          [payload]: {
-            ...state[payload],
-            deleted: true
-          }
-        }
+
+        const filteredComments = Object.values(state).reduce((acc, item) => {
+          if (item.id !== payload)
+            acc[item.id] = item;
+          return acc;
+        }, {});
+
+        return filteredComments
       }
 
       case VOTE_COMMENT: {

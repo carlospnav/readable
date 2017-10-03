@@ -164,7 +164,7 @@ header{
 
 .vote{
   width: 80px;
-  font-size: 22px;
+  font-size: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -180,7 +180,7 @@ header{
 }
 
 .like-thumbs{
-  font-size: 20px;
+  font-size: 18px;
   color: white;
   border: none;
   background: none;
@@ -194,6 +194,7 @@ header{
   height: 60px;
   padding: 0 20px;
   display: flex;
+  justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid rgba(0,0,0, .1);
 }
@@ -336,6 +337,7 @@ header{
 
 .edit-post, .delete-post{
   background-color: rgba(0,0,0,.1);
+  padding: 2px 6px;
 }
 
 .return-container{
@@ -348,6 +350,64 @@ header{
   margin: 0 0 60px 0;
 }
 
-.comments-menu{
+.details-button{
+  padding: 9px 20px;
+  margin: 0;
+}
 
+.content-menu{
+  display: flex;
+}
+
+.post-menu > a, .post-menu > button{
+  font-size: 20px;
+  padding: 0 2px;
+  text-decoration: none;
+  color: darkslateblue;
+}
+
+.post-menu > a{
+  padding: 0 8px 4px 2px;
+}
+
+.content-icon{
+  margin: 0 2px;
+  background: none;
+  border: none;
+  font-size: 18px;
+}
+
+.new-comment-form{
+  margin: 0 0 100px 0;
+  padding: 0;
+  border: 1px solid rgba(0,0,0,.1);
+  background: none;
+}
+
+.new-comment{
+  width: 100%;
+  border: none;
+}
+
+.new-comment-title, .new-comment-body{
+  border-bottom: 1px solid rgba(0,0,0,.1);
+  padding: 10px;
+}
+
+.new-comment-title{
+  height: 60px;
+}
+
+.new-comment-body{
+  height: 150px;
+}
+
+.new-comment-submit{
+  height: 40px;
+  margin: 6px;
+  background-color: black;
+  color: white;
+  font-family: 'Open Sans Condensed';
+  font-size: 16px;
+  font-weight: 900;
 }

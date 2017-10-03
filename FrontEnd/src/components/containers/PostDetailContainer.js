@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import Proptypes from 'prop-types';
 import { performRequestIfAble, GET_COMMENTS,  VOTE_COMMENT, DELETE_POST, VOTE_POST } from '../../actions'
 import PostThumb from '../views/PostThumb';
-import Comment from '../views/Comment';
+import Comments from '../views/Comments';
 
 const COMMENTS = 'comments';
 const POSTS = 'posts';
@@ -58,14 +58,8 @@ class UnrouteredPostDetailContainer extends Component{
         {(post) && (   
           <PostThumb key={post.id} post={post} isThumb={false} handleVote={this.handleVote} deletePost={this.deletePost} />
         )}
-        <div className="comments">
-          {(commentsArr.length > 0) && (
-            commentsArr.map((comment) => (
-                <Comment key={comment.id} comment={comment} handleVote={this.handleVote} />
-              )
-            )
-          )}
-        </div>
+        <Comments  comments={commentsArr} handleVote={this.handleVote}/>
+
       </section>
     )
   }

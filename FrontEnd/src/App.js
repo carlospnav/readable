@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import CategoryError from './components/error/CategoryError';
-import CreateOrEditPostContainer from './components/containers/CreateOrEditPostContainer';
 import CategoriesContainer from './components/containers/CategoriesContainer';
 import PostsListContainer from './components/containers/PostsListContainer';
 import PostDetailContainer from './components/containers/PostDetailContainer';
+import FormSelector from './components/containers/FormSelector';
 import { performRequestIfAble, GET_CATEGORIES, GET_POSTS } from './actions';
 
 const CATEGORIES = 'categories';
@@ -42,8 +42,8 @@ class App extends Component{
         <Route exact path="/category" component={PostsListContainer} />
         <Route path="/category/:category" component={PostsListContainer} />
 
-        <Route exact path="/create/post" component={CreateOrEditPostContainer} />
-        <Route path="/edit/post/:id" component={CreateOrEditPostContainer} />
+        <Route exact path="/create/post" component={FormSelector} />
+        <Route path="/edit/post/:id" component={FormSelector} />
 
         <Route exact path="/details/:id" component={PostDetailContainer} />
 
@@ -58,8 +58,6 @@ export default App;
 
 
       /*
-        <button onClick={ () => { this.props.dispatch(performRequestIfAble(DELETE_POST, 'posts', 1)) }}> DELETE </button>
-
         <button onClick={ () => { this.props.dispatch(performRequestIfAble(ADD_COMMENT, 'comments', { id:121, parentId: '6ni6ok3ym7mf1p33lnez', timestamp: 1469479767190, body: 'Moar comments.', author: 'thingsix' })) }}> ADD </button>
         <button onClick={ () => { this.props.dispatch(performRequestIfAble(EDIT_COMMENT, 'comments', { id:121, parentId: '6ni6ok3ym7mf1p33lnez', timestamp: 1469479767190, body: 'Moar comments.', author: 'thingsixtySix' })) }}> EDIT </button>
         <button onClick={ () => { this.props.dispatch(performRequestIfAble(DELETE_COMMENT, 'comments', 121)) }}> DELETE </button>

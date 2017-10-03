@@ -49,6 +49,7 @@ UnrouteredPostsListContainer.propTypes = {
 }
 
 const mapStateToProps = (state) => {
+  console.log(state)
   const { posts, categories } = state;
 
   return {
