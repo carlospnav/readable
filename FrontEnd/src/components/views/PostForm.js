@@ -6,7 +6,6 @@ import FormSet from './FormSet';
 to create or edit a post. 
 */
 const PostForm = ({post, categories, errors, cbs}) => {
-
   const {author, title, body, category} = post;
   const{handleChange, handleSubmit} = cbs;
 

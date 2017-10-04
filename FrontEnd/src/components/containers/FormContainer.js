@@ -24,7 +24,7 @@ class UnrouteredFormContainer extends Component {
     super(props);
 
     this.state = {
-      entity: this.props.entity,
+      entity: this.props[this.props.type],
       errors: this.props.errors,
       validationRules: {
         author: {maxLength: 20},
@@ -39,12 +39,13 @@ class UnrouteredFormContainer extends Component {
   */
   componentDidMount(){
     const {id} = this.props.match.params;
-    const {posts} = this.props;
+    const {type} = this.props;
+    const entities = this.props[type];
 
     if (id) {
-      const post = posts[id];
+      const entity = entities[id];
 
-      this.setState({post});
+      this.setState({entity});
     }
   }
 
@@ -127,6 +128,7 @@ class UnrouteredFormContainer extends Component {
     const {validationRules} = this.state;
     const errors = {};
 
+    debugger;
     //Form validation.
     for (let field of Object.keys(validationRules))
       errors[field] = this.validate(field, entity[field]);
@@ -173,34 +175,27 @@ class UnrouteredFormContainer extends Component {
     const {categories, type} = this.props;
     const {errors, entity} = this.state;
 
+    const formToReturn = (type === 'posts') ? 
+    (<PostForm 
+      post={entity}
+      categories={Object.keys(categories)}
+      errors={errors}
+      cbs={{
+        handleChange: this.handleChange,
+        handleSubmit: this.handleSubmit}}
+    />) :
+     (<PostForm 
+     post={entity}
+     categories={Object.keys(categories)}
+     errors={errors}
+     cbs={{
+       handleChange: this.handleChange,
+       handleSubmit: this.handleSubmit}}
+     />);
+
     return (
       (this.areLoaded(CATEGORIES) && 
-        (
-          (type === 'posts') && (
-            <PostForm 
-              post={entity} 
-              categories={Object.keys(categories)} 
-              errors={errors}
-              cbs={{handleChange: this.handleChange,
-                    handleSubmit: this.handleSubmit}} 
-            />)
-          (type === 'comments') && (<div>Comments</div>)
-          // (type === 'posts') && (
-          //   <PostForm 
-          //     post={entity} 
-          //     categories={Object.keys(categories)} 
-          //     errors={errors}
-          //     cbs={{handleChange: this.handleChange,
-          //           handleSubmit: this.handleSubmit}} 
-          //   />) 
-          // ||
-          // (false) && ( <div>iou</div>)
-        //   (type === 'comments') && (
-        //     <div>
-        //       Oi Comment.
-        //     </div>
-        //   )
-        )
+        (formToReturn)
       )
     )
   }

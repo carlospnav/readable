@@ -10,8 +10,7 @@ const FormSelector = ({entity, match}) => {
   }
 
   const defineType = () => {
-
-    switch(match.params.path){
+    switch(match.path){
       case '/create/post':
         return POSTS;
       default:
