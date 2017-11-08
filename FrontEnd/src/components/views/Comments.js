@@ -1,8 +1,9 @@
 import React from 'react';
 import Comment from './Comment';
 import CommentFormContainer from '../containers/CommentFormContainer';
+import FormSelector from '../containers/FormSelector';
 
-const Comments= ({comments, handleVote}) => {
+const Comments= ({comments, handleVote, match}) => {
 
 
   return (
@@ -13,7 +14,8 @@ const Comments= ({comments, handleVote}) => {
           )
         )
       )}
-      <CommentFormContainer />
+      <FormSelector entity={{}} match={match} />
+      {/* <CommentFormContainer /> */}
     </div>
   )
 }

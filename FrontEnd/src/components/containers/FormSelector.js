@@ -12,12 +12,12 @@ const FormSelector = ({entity, match}) => {
   const defineType = () => {
     switch(match.path){
       case '/create/post':
+      case '/edit/post/:id':
         return POSTS;
       default:
       break;
     }
   }
-
   type = defineType();
 
   if (type === 'posts'){

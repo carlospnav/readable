@@ -11,7 +11,7 @@ const FormSet = ({ errorArr, onChangeHandler, field, value, specialClass, classN
         onChange={(event) => onChangeHandler(field, event.currentTarget.value)} 
         className={className} 
         type="text" 
-        value={value} 
+        value={value || ''} 
         placeholder={placeholder}
       />
     </div>

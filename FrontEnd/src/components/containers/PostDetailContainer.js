@@ -49,7 +49,7 @@ class UnrouteredPostDetailContainer extends Component{
     const {posts, match} = this.props;
     const post = posts[match.params.id];
     const commentsArr = this.getCommentsArr();
-
+    
     return (
       <section className="post-detail-container">
         <nav className="return-container">
@@ -58,8 +58,8 @@ class UnrouteredPostDetailContainer extends Component{
         {(post) && (   
           <PostThumb key={post.id} post={post} isThumb={false} handleVote={this.handleVote} deletePost={this.deletePost} />
         )}
-        <Comments  comments={commentsArr} handleVote={this.handleVote}/>
-
+      
+        <Comments comments={commentsArr} handleVote={this.handleVote} match={match}/>
       </section>
     )
   }

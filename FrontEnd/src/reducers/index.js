@@ -64,8 +64,6 @@ const categories = (state = {}, action) => {
     case GET_CATEGORIES: {
       const {categories} = action;
 
-      console.log(categories)
-
       return {
         ...categories,
       }
@@ -102,7 +100,6 @@ const posts = (state = {}, action) => {
     //Creates a post.
     case ADD_POST: { 
       const { payload } = action;
-      
       return{
         ...state,
         [payload.id]: {

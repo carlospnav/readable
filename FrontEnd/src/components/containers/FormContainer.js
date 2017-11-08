@@ -24,7 +24,7 @@ class UnrouteredFormContainer extends Component {
     super(props);
 
     this.state = {
-      entity: this.props[this.props.type],
+      entity: this.props.entity || { category: 'react'},
       errors: this.props.errors,
       validationRules: {
         author: {maxLength: 20},
@@ -34,15 +34,16 @@ class UnrouteredFormContainer extends Component {
     }
   }
 
-  /* If the form required is the Edit Post, adds the post to edit to the state
-  of this controlled Form component.
+  /* If the form required is the Edit version, which can be determined by the fact 
+  that the route contains an ID,adds the proper entity to edit to the state, of this 
+  controlled Form component.
   */
   componentDidMount(){
     const {id} = this.props.match.params;
     const {type} = this.props;
     const entities = this.props[type];
-
-    if (id) {
+ 
+    if (id) { 
       const entity = entities[id];
 
       this.setState({entity});
@@ -123,15 +124,14 @@ class UnrouteredFormContainer extends Component {
   */
   handleSubmit = (event) =>{
     event.preventDefault();
+    const {type, match} = this.props;
     const {entity} = this.state;
-    const {entities, match} = this.props;
     const {validationRules} = this.state;
     const errors = {};
 
-    debugger;
     //Form validation.
     for (let field of Object.keys(validationRules))
-      errors[field] = this.validate(field, entity[field]);
+      errors[field] = this.validate(field, entity[field]); //Will be a problem if comments and posts have different fields to validate.
 
     if (errors['author'].length === 0 && errors['title'].length === 0 && errors['body'].length === 0){
       let newEntity;
@@ -139,17 +139,16 @@ class UnrouteredFormContainer extends Component {
       //Routing switch.
       switch(match.path){
         case '/create/post': {
-          const currentIds = Object.keys(entities);
+          const currentIds = Object.keys(this.props.posts);
           let id = uuidv4();
-
           while(currentIds.includes(id)) {
             id = uuidv4();
           }
+          debugger
           newEntity = {
             ...entity,
             id: id,
             timestamp: Date.now(),
-            votescore: 1,
             deleted: false
           }
           this.props.dispatch(performRequestIfAble(ADD_POST, POSTS, newEntity));
@@ -184,7 +183,7 @@ class UnrouteredFormContainer extends Component {
         handleChange: this.handleChange,
         handleSubmit: this.handleSubmit}}
     />) :
-     (<PostForm 
+     (<PostForm //CHANGE TO COMMENTS FORM
      post={entity}
      categories={Object.keys(categories)}
      errors={errors}

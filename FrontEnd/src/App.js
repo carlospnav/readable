@@ -1,14 +1,20 @@
 import React, { Component } from 'react';
-import { Route, Redirect } from 'react-router-dom';
-import CategoryError from './components/error/CategoryError';
-import CategoriesContainer from './components/containers/CategoriesContainer';
-import PostsListContainer from './components/containers/PostsListContainer';
-import PostDetailContainer from './components/containers/PostDetailContainer';
-import FormSelector from './components/containers/FormSelector';
+import { Route } from 'react-router-dom';
+import Layout from './components/views/layouts/Layout';
+// import CategoryError from './components/error/CategoryError';
+// import CategoriesContainer from './components/containers/CategoriesContainer';
+// import PostsListContainer from './components/containers/PostsListContainer';
+// import PostDetailContainer from './components/containers/PostDetailContainer';
+// import FormSelector from './components/containers/FormSelector';
 import { performRequestIfAble, GET_CATEGORIES, GET_POSTS } from './actions';
 
 const CATEGORIES = 'categories';
 const POSTS = 'posts';
+
+//TODOS:
+/*
+2 - Test comments logics. Add/Edit/Delete
+*/
 
 class App extends Component{
 
@@ -19,37 +25,7 @@ class App extends Component{
 
   render(){
     return (
-      <div className="App">
-        <Route exact path="/" render={() => (
-          <Redirect to="/category" />
-        )} />
-        <header>
-          <h2 className="app-title"> Readable </h2>
-          <Route exact path="/category" component={CategoriesContainer} />
-          <Route path="/category/:category" component={CategoriesContainer} />
-          
-          <Route exact path="/create/post" render={() => (
-            <h2 className="form-title nav-menu-item">Create Post</h2>
-          )} />
-          <Route path="/edit/post/:id" render={() => (
-            <h2 className="form-title nav-menu-item">Edit Post</h2>
-          )} />
-          <Route exact path="/details/:id" render={() =>(
-            <h2 className="form-title nav-menu-item">Post Details</h2>
-          )} />
-        </header>
-
-        <Route exact path="/category" component={PostsListContainer} />
-        <Route path="/category/:category" component={PostsListContainer} />
-
-        <Route exact path="/create/post" component={FormSelector} />
-        <Route path="/edit/post/:id" component={FormSelector} />
-
-        <Route exact path="/details/:id" component={PostDetailContainer} />
-
-        
-        <Route exact path="/categoryError" component={CategoryError} />
-      </div>
+      <Route path="/" component={Layout} />
     );
   }
 }

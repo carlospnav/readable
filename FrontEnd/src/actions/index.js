@@ -80,7 +80,6 @@ const processRequest = (result) => {
 const configRequest = (options) => {
   const {actionType, payload, entity} = options;
   const get = (dispatch, {url, xhrInit}) => {
-
     return fetch(url, xhrInit)
       .then(response => response.json())
       .then(json => dispatch(receiveEntity(json, actionType, entity, payload)))
@@ -93,6 +92,7 @@ const configRequest = (options) => {
       })
       .then(() => dispatch(makeRequest(entity)));
   }
+
   const commonXhr = {
     xhrInit:{
       headers:{
@@ -226,7 +226,6 @@ function shouldProceed(state, entity, actionType, payload) {
 //RETURNS RESULT OBJECT WITH ERROR IF PROBLEM ENCOUNTERED
 export const performRequestIfAble = (actionType, entity, payload = null) => {
   return (dispatch, getState) => {
-
     const result = shouldProceed(getState(), entity, actionType, payload);
 
     if (result.shouldProceed)
